@@ -15,9 +15,9 @@ from selenium.webdriver.common.keys import Keys
 
 
 # Dostosuj te ścieżki do swoich lokalizacji
-OPERA_BINARY_PATH = r'C:\Users\kmarcinski\AppData\Local\Programs\Opera\opera.exe'  # Przykład ścieżki do Opera.exe
-OPERADRIVER_PATH = r'C:\operadriver_win64\operadriver.exe'  # Pobierz z https://github.com/operasoftware/operachromiumdriver/releases i rozpakuj
-OPERA_PROFILE_PATH = r'C:\Users\kmarcinski\AppData\Local\Opera Software\Opera Stable'
+OPERA_BINARY_PATH = r'/snap/opera/399/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
+OPERADRIVER_PATH = r'/home/czarli/Documents/operadriver_linux64/operadriver'  # Pobierz z https://github.com/operasoftware/operachromiumdriver/releases i rozpakuj
+OPERA_PROFILE_PATH = r'/home/czarli/snap/opera/399/.config/opera/Default'
 
 # Ustawienia dla Opera (używa ChromeDriver z binary Opera, bo Opera jest Chromium-based)
 options = Options()
