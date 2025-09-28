@@ -1,5 +1,7 @@
 import time
 import json
+import os
+import sys
 from seleniumwire import webdriver  # pip install selenium-wire
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -7,6 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import psycopg2
 from psycopg2.extras import execute_values
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from datetime import datetime
 import keyboard
 
@@ -39,9 +43,25 @@ db_params = {
     'port': '5432'  # Default PostgreSQL port
 }
 
+try:
+    conn = psycopg2.connect(**db_params)
+    print("Połączenie z bazą danych nawiązane pomyślnie!")
+except Exception as e:
+    print(f"Błąd połączenia z bazą danych: {e}")
+    exit(1)
 
-with open('symbols_raw_list.txt', 'r') as file:
-    symbols = [line.strip() for line in file if line.strip()]
+try:
+    conn_temp = psycopg2.connect(**db_params)
+    cursor_temp = conn_temp.cursor()
+    cursor_temp.execute('SELECT "Symbol" FROM public."tStockSymbols" WHERE "enabled" = TRUE ORDER BY "UpdatedShortTerm" ASC')
+    symbols = [row[0] for row in cursor_temp.fetchall()]
+    cursor_temp.close()
+    conn_temp.close()
+    print(f"Pobrano {len(symbols)} symboli z tabeli tStockSymbols, posortowane rosnąco po UpdatedShortTerm")
+    print(symbols)
+except Exception as e:
+    print(f"Błąd pobierania symboli z bazy danych: {e}")
+    exit(1)
 
 try:
     # Uruchom przeglądarkę z selenium-wire
@@ -50,23 +70,40 @@ try:
 except Exception as e:
     print(f"Błąd uruchamiania: {e}")
     exit(1)
-with open('symbols_raw_list.txt', 'r') as file:
-    symbols = [line.strip() for line in file if line.strip()]
 
-# Nawiąż połączenie z bazą danych raz na początku (dla efektywności w nieskończonej pętli)
-try:
-    conn = psycopg2.connect(**db_params)
-    print("Połączenie z bazą danych nawiązane pomyślnie!")
-except Exception as e:
-    print(f"Błąd połączenia z bazą danych: {e}")
-    driver.quit()
-    exit(1)
 
 # Monitorowanie WebSocket z filtrem na prodata.tradingview.com/socket.io
 seen_messages = set()
 iteration = 0
 previous_request_count = 0
+# Valid indices without 'NO' from the provided table
+valid_indices = [5, 6, 7, 8, 9, 11, 13, 15, 17, 19, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+restart_after_iterations = 50
+
 while True:
+    # Check for restart condition
+    if iteration > 0 and iteration % restart_after_iterations == 0:
+        print(f"Reached {iteration} iterations, restarting script...")
+        # Close browser and database
+        try:
+            driver.close()
+        except Exception as e:
+            print(f"Error closing browser windows: {e}")
+        # Quit WebDriver
+        try:
+            driver.quit()
+            print("WebDriver closed.")
+        except Exception as e:
+            print(f"Error closing WebDriver: {e}")
+        # Close database connection
+        try:
+            conn.close()
+            print("Database connection closed.")
+        except Exception as e:
+            print(f"Error closing database: {e}")
+        # Restart the script
+        os.execv(sys.executable, ['python3'] + sys.argv)
+
     # Flaga do ograniczenia przetwarzania tylko jednego study_loading na iterację
     found_study_loading = False
     # Get the current symbol (cycle through the list using modulo)
@@ -89,21 +126,10 @@ while True:
             current_symbol_id = result[0]
             print(f"Symbol istnieje: {current_symbol}, id: {current_symbol_id}")
         else:
-            # Symbol nie istnieje: Wstaw nowy wiersz z UpdatedShortTerm = NULL i UpdatedLongTerm = NULL
-            insert_query = """
-                INSERT INTO public."tStockSymbols" ("Symbol", "UpdatedShortTerm", "UpdatedLongTerm")
-                VALUES (%s, NULL, NULL)
-                RETURNING id
-                """
-            cursor.execute(insert_query, (current_symbol,))
-            current_symbol_id = cursor.fetchone()[0]
-            print(
-                f"Dodano nowy wiersz dla symbolu: {current_symbol}, id: {current_symbol_id} z UpdatedShortTerm = NULL i UpdatedLongTerm = NULL")
-
-        conn.commit()
+            continue
     except (Exception, psycopg2.Error) as error:
         print(f"Błąd operacji na bazie danych dla symbolu {current_symbol}: {error}")
-        conn.rollback()
+        continue
     finally:
         cursor.close()
 
@@ -119,6 +145,8 @@ while True:
         print(f"Login error (Timeout) for {url}: {e}")
     except Exception as e:
         print(f"Unexpected error for {url}: {e}")
+
+    #time.sleep(2)
 
     iteration += 1
     print(f"\n--- Iteration {iteration} (Symbol: {current_symbol}) ---")
@@ -196,28 +224,29 @@ while True:
                                                             # Przygotowanie danych do wstawienia do tStock_IndicatorValues_Pifagor_Short
                                                             insert_data = []
                                                             for idx, value in enumerate(v_list):
-                                                                try:
-                                                                    # Konwersja na float i sprawdzenie zakresu dla double precision
-                                                                    value_float = float(value)
-                                                                    value_float = round(value_float, 2)
-                                                                    if abs(value_float) > 1e10:
-                                                                         value_float = 1234.5678 # Zastąp wartości spoza zakresu na NULL
-                                                                    insert_data.append((
-                                                                        current_symbol_id,  # idSymbol
-                                                                        i_value - 299,  # TickerRelative
-                                                                        idx,  # IndicatorIndex
-                                                                        value_float
-                                                                    # IndicatorValue jako tablica real[]
-                                                                    ))
-                                                                except (ValueError, OverflowError):
-                                                                    print(
-                                                                        f"Błąd konwersji wartości {value} dla i={i_value}, idx={idx}, zapisano jako NULL")
-                                                                    insert_data.append((
-                                                                        current_symbol_id,
-                                                                        i_value - 299,
-                                                                        idx,
-                                                                        None
-                                                                    ))
+                                                                if idx in valid_indices:  # Only include valid indices
+                                                                    try:
+                                                                        # Konwersja na float i sprawdzenie zakresu dla double precision
+                                                                        value_float = float(value)
+                                                                        value_float = round(value_float, 2)
+                                                                        if abs(value_float) > 1e10:
+                                                                            value_float = 1234.5678  # Zastąp wartości spoza zakresu na NULL
+                                                                        insert_data.append((
+                                                                            current_symbol_id,  # idSymbol
+                                                                            i_value - len(filtered_st_data) + 1,
+                                                                            # TickerRelative
+                                                                            idx,  # IndicatorIndex
+                                                                            value_float  # IndicatorValue
+                                                                        ))
+                                                                    except (ValueError, OverflowError):
+                                                                        print(
+                                                                            f"Błąd konwersji wartości {value} dla i={i_value}, idx={idx}, zapisano jako NULL")
+                                                                        insert_data.append((
+                                                                            current_symbol_id,
+                                                                            i_value - len(filtered_st_data) + 1,
+                                                                            idx,
+                                                                            None
+                                                                        ))
 
                                                             # Wstawianie wszystkich wierszy dla danego item
                                                             cursor = conn.cursor()
@@ -237,6 +266,28 @@ while True:
                                                                 conn.rollback()
                                                             finally:
                                                                 cursor.close()
+
+
+                                                        # Aktualizacja UpdatedShortTerm dla bieżącego symbolu
+                                                        if current_symbol_id is not None:
+                                                            cursor = conn.cursor()
+                                                            try:
+                                                                update_query = """
+                                                                UPDATE public."tStockSymbols"
+                                                                SET "UpdatedShortTerm" = CURRENT_DATE
+                                                                WHERE id = %s
+                                                                """
+                                                                cursor.execute(update_query, (current_symbol_id,))
+                                                                print(
+                                                                    f"Zaktualizowano UpdatedShortTerm dla symbolu: {current_symbol}, id: {current_symbol_id}")
+                                                                conn.commit()
+                                                            except (Exception, psycopg2.Error) as error:
+                                                                print(
+                                                                    f"Błąd aktualizacji UpdatedShortTerm dla symbolu {current_symbol}: {error}")
+                                                                conn.rollback()
+                                                            finally:
+                                                                cursor.close()
+
 
                                                     found_study_loading = True  # Znaleziono pasujące study_loading, pomiń kolejne wiadomości
                                                     break  # Przerwij pętlę while, bo mamy już pasujące dane
@@ -258,32 +309,8 @@ while True:
         print("Brak WS requestów z prodata.tradingview.com/socket.io – upewnij się, że chart/study jest załadowany.")
 
 
-    # Aktualizacja UpdatedShortTerm dla bieżącego symbolu
-    if current_symbol_id is not None:
-        cursor = conn.cursor()
-        try:
-            update_query = """
-            UPDATE public."tStockSymbols"
-            SET "UpdatedShortTerm" = CURRENT_DATE
-            WHERE id = %s
-            """
-            cursor.execute(update_query, (current_symbol_id,))
-            print(f"Zaktualizowano UpdatedShortTerm dla symbolu: {current_symbol}, id: {current_symbol_id}")
-            conn.commit()
-        except (Exception, psycopg2.Error) as error:
-            print(f"Błąd aktualizacji UpdatedShortTerm dla symbolu {current_symbol}: {error}")
-            conn.rollback()
-        finally:
-            cursor.close()
 
 
     # Update previous_request_count for the next iteration
     previous_request_count = len(driver.requests)
 
-
-
-    time.sleep(5)  # Sprawdź co 2s
-
-
-    # Opcjonalna pauza, aby zobaczyć efekt
-    time.sleep(2)  # Dodatkowa pauza na obserwację
