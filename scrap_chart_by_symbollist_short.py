@@ -15,14 +15,13 @@ from datetime import datetime
 import keyboard
 
 # Dostosuj te ścieżki do swoich lokalizacji
-OPERA_BINARY_PATH = r'/snap/opera/399/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
+OPERA_BINARY_PATH = r'/snap/opera/401/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
 OPERADRIVER_PATH = r'/home/czarli/Documents/operadriver_linux64/operadriver'  # Pobierz z https://github.com/operasoftware/operachromiumdriver/releases i rozpakuj
 OPERA_PROFILE_PATH = r'/home/czarli/snap/opera/399/.config/opera/Default'
 
 # Ustawienia dla Opera (używa ChromeDriver z binary Opera, bo Opera jest Chromium-based)
 options = Options()
 options.binary_location = OPERA_BINARY_PATH
-options.add_argument('--start-maximized')
 options.add_argument('--disable-gpu')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
@@ -53,7 +52,14 @@ except Exception as e:
 try:
     conn_temp = psycopg2.connect(**db_params)
     cursor_temp = conn_temp.cursor()
-    cursor_temp.execute('SELECT "Symbol" FROM public."tStockSymbols" WHERE "enabled" = TRUE ORDER BY "UpdatedShortTerm" ASC')
+    query = """
+    SELECT "Symbol"
+    FROM public."tStockSymbols"
+    WHERE "enabled" = TRUE
+    AND "UpdatedShortTerm" != CURRENT_DATE
+    ORDER BY "UpdatedShortTerm" ASC
+    """
+    cursor_temp.execute(query)
     symbols = [row[0] for row in cursor_temp.fetchall()]
     cursor_temp.close()
     conn_temp.close()
@@ -66,6 +72,7 @@ except Exception as e:
 try:
     # Uruchom przeglądarkę z selenium-wire
     driver = webdriver.Chrome(service=service, options=options)
+    driver.set_window_size(100, 100)  # Ustawia rozmiar okna na 800x600 pikseli
     print("Przeglądarka Opera uruchomiona pomyślnie!")
 except Exception as e:
     print(f"Błąd uruchamiania: {e}")
@@ -78,6 +85,7 @@ iteration = 0
 previous_request_count = 0
 # Valid indices without 'NO' from the provided table
 valid_indices = [5, 6, 7, 8, 9, 11, 13, 15, 17, 19, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+#valid_indices = [i for i in range(0,100)]
 restart_after_iterations = 50
 
 while True:
