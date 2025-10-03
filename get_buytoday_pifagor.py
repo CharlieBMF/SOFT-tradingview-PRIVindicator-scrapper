@@ -53,10 +53,10 @@ try:
             SELECT "TickerRelative"
             FROM public."tStock_IndicatorValues_Pifagor_Short"
             WHERE "idSymbol" = %s
-            AND "TickerRelative" IN (0, -1, -2, -3, -4, -5)
+            AND "TickerRelative" IN (0, -1)
             AND (
                 ("IndicatorIndex" = 22 AND "IndicatorValue" > 3) OR
-                ("IndicatorIndex" IN (7, 8) AND "IndicatorValue" > 0)
+                ("IndicatorIndex" = 7 AND "IndicatorValue" > 0)
             )
             GROUP BY "TickerRelative"
             HAVING 

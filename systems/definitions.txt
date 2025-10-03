@@ -1,0 +1,147 @@
+001
+=== Global Summary ===
+Sumaryczny zysk: 186.75 $, procentowy zysk: 8.19%
+Sredni czas otwarcia pozycji: 53.06 days
+Najdluzszy czas otwarcia pozycji: 550.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 32.97 $ (symbol: NYSE:ADNT)
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 218.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols',
+'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and
+'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22'
+ and 'indicatorIndex=5'. A position was opened or additional shares were bought for $1 whenever 'indicatorIndex=22'
+ exceeded 3, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism:
+ when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated
+ daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop.
+ The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value,
+  closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were
+   calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit,
+   percentage gain, average position duration, longest position duration with its symbol, and the highest position
+    value with its symbol. Additionally, it computed the maximum total cost of open positions across all
+    symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+
+
+002 - zamykana pozycja od jakiegos floating gowna
+=== Global Summary ===
+Sumaryczny zysk: 307.54 $, procentowy zysk: 8.43%
+Sredni czas otwarcia pozycji: 52.73 days
+Najdluzszy czas otwarcia pozycji: 550.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 79.39 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 328
+Liczba pozycji zamknietych na stracie: 75
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 358.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit, percentage gain, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+
+
+
+
+003 - zamykana pozycja gdy sygnal sprzedazy pifagora, kupno jak w 002
+
+=== Global Summary ===
+Sumaryczny zysk: 438.36 $, procentowy zysk: 12.09%
+Sredni czas otwarcia pozycji: 80.66 days
+Najdluzszy czas otwarcia pozycji: 389.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 74.45 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 275
+Liczba pozycji zamknietych na stracie: 47
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 386.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit, percentage gain, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+=== Global Summary === dla max symboli
+Sumaryczny zysk: 5015.02 $, procentowy zysk: 9.38%
+Sredni czas otwarcia pozycji: 83.63 days
+Najdluzszy czas otwarcia pozycji: 732.0 days (symbol: NASDAQ:HAS)
+Najwieksza wartosc pozycji: 72.59 $ (symbol: NASDAQ:HAS)
+Liczba pozycji zamknietych na zysku: 4074
+Liczba pozycji zamknietych na stracie: 669
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 4952.00 $ dla TickerRelative = -1696.0
+
+
+
+
+
+
+
+
+
+
+
+004- dodatkowo dokupowanie przez duzy zolty trojkat
+
+=== Global Summary ===
+Sumaryczny zysk: 544.49 $, procentowy zysk: 10.48%
+Sredni czas otwarcia pozycji: 74.58 days
+Najdluzszy czas otwarcia pozycji: 499.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 75.58 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 665
+Liczba pozycji zamknietych na stracie: 79
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 482.00 $ dla TickerRelative = -112.0
+
+
+
+=== Global Summary ===
+Sumaryczny zysk: 6674.73 $, procentowy zysk: 8.70%
+Sredni czas otwarcia pozycji: 79.41 days
+Najdluzszy czas otwarcia pozycji: 866.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 86.09 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 9429
+Liczba pozycji zamknietych na stracie: 993
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 6381.00 $ dla TickerRelative = -479.0
+
+
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 484.47 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 484.47 $
+Sredni czas otwarcia pozycji: 73.31 days
+Najdluzszy czas otwarcia pozycji: 499.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 86.09 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 734
+Liczba pozycji zamknietych na stracie: 91
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 429.00 $ dla TickerRelative = -1692.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 112.93%
+
+
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 4774.58 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4774.58 $
+Sredni czas otwarcia pozycji: 62.76 days
+Najdluzszy czas otwarcia pozycji: 241.0 days (symbol: NASDAQ:REGN)
+Najwieksza wartosc pozycji: 678.52 $ (symbol: NASDAQ:REGN)
+Liczba pozycji zamknietych na zysku: 817
+Liczba pozycji zamknietych na stracie: 109
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 47070.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.14%
+
+
+
+005

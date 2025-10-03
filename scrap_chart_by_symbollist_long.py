@@ -9,10 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import psycopg2
 from psycopg2.extras import execute_values
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from datetime import datetime
-import keyboard
 
 # Dostosuj te ścieżki do swoich lokalizacji
 OPERA_BINARY_PATH = r'/snap/opera/401/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
@@ -30,6 +26,7 @@ options.add_argument(f'--user-data-dir={OPERA_PROFILE_PATH}')  # Ładuje Twój p
 options.add_argument('--profile-directory=Default')  # Domyślny profil (zmień, jeśli używasz innego)
 options.add_experimental_option('w3c', True)
 options.add_argument('--disable-extensions')  # Wyłącz rozszerzenia, jeśli kolidują
+options.add_argument('--force-device-scale-factor=0.5')
 
 service = Service(executable_path=OPERADRIVER_PATH)
 
@@ -56,14 +53,15 @@ try:
     SELECT "Symbol"
     FROM public."tStockSymbols"
     WHERE "enabled" = TRUE
-    AND "UpdatedShortTerm" != CURRENT_DATE
-    ORDER BY "UpdatedShortTerm" ASC
+    AND "UpdatedLongTerm" != CURRENT_DATE
+    ORDER BY "UpdatedLongTerm" ASC
     """
     cursor_temp.execute(query)
     symbols = [row[0] for row in cursor_temp.fetchall()]
     cursor_temp.close()
     conn_temp.close()
-    print(f"Pobrano {len(symbols)} symboli z tabeli tStockSymbols, posortowane rosnąco po UpdatedShortTerm")
+    print(f"Pobrano {len(symbols)} symboli z tabeli tStockSymbols, posortowane rosnąco po UpdatedLongTerm")
+    #symbols= ['NYSE:A']
     print(symbols)
 except Exception as e:
     print(f"Błąd pobierania symboli z bazy danych: {e}")
@@ -72,7 +70,7 @@ except Exception as e:
 try:
     # Uruchom przeglądarkę z selenium-wire
     driver = webdriver.Chrome(service=service, options=options)
-    driver.set_window_size(100, 100)  # Ustawia rozmiar okna na 800x600 pikseli
+    driver.set_window_size(15000, 360)  # Ustawia rozmiar okna na 800x600 pikseli
     print("Przeglądarka Opera uruchomiona pomyślnie!")
 except Exception as e:
     print(f"Błąd uruchamiania: {e}")
@@ -86,7 +84,7 @@ previous_request_count = 0
 # Valid indices without 'NO' from the provided table
 valid_indices = [5, 6, 7, 8, 9, 11, 13, 15, 17, 19, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
 #valid_indices = [i for i in range(0,100)]
-restart_after_iterations = 50
+restart_after_iterations = 35
 
 while True:
     # Check for restart condition
@@ -199,19 +197,19 @@ while True:
                                                 st_data = data['p'][1].get(list(data['p'][1].keys())[0], {}).get('st', [])
                                                 has_valid_v = any(len(item.get('v', [])) == 37 for item in st_data)
                                                 if has_valid_v:
-                                                    # Usuwanie istniejących wierszy z tStock_IndicatorValues_Pifagor_Short dla current_symbol_id
+                                                    # Usuwanie istniejących wierszy z tStock_IndicatorValues_Pifagor_Long dla current_symbol_id
                                                     cursor = conn.cursor()
                                                     try:
                                                         delete_query = """
-                                                        DELETE FROM public."tStock_IndicatorValues_Pifagor_Short"
+                                                        DELETE FROM public."tStock_IndicatorValues_Pifagor_Long"
                                                         WHERE "idSymbol" = %s
                                                         """
                                                         cursor.execute(delete_query, (current_symbol_id,))
                                                         deleted_rows = cursor.rowcount
-                                                        print(f"Usunięto {deleted_rows} wierszy z tStock_IndicatorValues_Pifagor_Short dla idSymbol={current_symbol_id}")
+                                                        print(f"Usunięto {deleted_rows} wierszy z tStock_IndicatorValues_Pifagor_Long dla idSymbol={current_symbol_id}")
                                                         conn.commit()
                                                     except (Exception, psycopg2.Error) as error:
-                                                        print(f"Błąd usuwania wierszy z tStock_IndicatorValues_Pifagor_Short: {error}")
+                                                        print(f"Błąd usuwania wierszy z tStock_IndicatorValues_Pifagor_Long: {error}")
                                                         conn.rollback()
                                                     finally:
                                                         cursor.close()
@@ -221,15 +219,16 @@ while True:
                                                             item for item in st_data
                                                             if len(item.get('v', [])) == 37
                                                                and isinstance(item.get('i'), (int, float))
-                                                               and 0 <= item.get('i') <= 299
+                                                               and -3000 <= item.get('i') <= 299
                                                         ]
                                                         inserted_data = 0
+
                                                         # Przetwarzanie wyfiltrowanych elementów
                                                         for item in reversed(filtered_st_data):
                                                             v_list = item.get('v', [])
                                                             i_value = item.get('i')
 
-                                                            # Przygotowanie danych do wstawienia do tStock_IndicatorValues_Pifagor_Short
+                                                            # Przygotowanie danych do wstawienia do tStock_IndicatorValues_Pifagor_Long
                                                             insert_data = []
                                                             for idx, value in enumerate(v_list):
                                                                 if idx in valid_indices:  # Only include valid indices
@@ -241,7 +240,7 @@ while True:
                                                                             value_float = 1234.5678  # Zastąp wartości spoza zakresu na NULL
                                                                         insert_data.append((
                                                                             current_symbol_id,  # idSymbol
-                                                                            int(i_value - len(filtered_st_data) + 1),
+                                                                            (i_value - len(filtered_st_data) + 1) if len(filtered_st_data) < 300 else (i_value - 299),
                                                                             # TickerRelative
                                                                             idx,  # IndicatorIndex
                                                                             value_float  # IndicatorValue
@@ -251,7 +250,7 @@ while True:
                                                                             f"Błąd konwersji wartości {value} dla i={i_value}, idx={idx}, zapisano jako NULL")
                                                                         insert_data.append((
                                                                             current_symbol_id,
-                                                                            i_value - len(filtered_st_data) + 1,
+                                                                            (i_value - len(filtered_st_data) + 1) if len(filtered_st_data) < 300 else (i_value - 299),
                                                                             idx,
                                                                             None
                                                                         ))
@@ -260,13 +259,13 @@ while True:
                                                             cursor = conn.cursor()
                                                             try:
                                                                 insert_query = """
-                                                                INSERT INTO public."tStock_IndicatorValues_Pifagor_Short" 
+                                                                INSERT INTO public."tStock_IndicatorValues_Pifagor_Long" 
                                                                 ("idSymbol", "TickerRelative", "IndicatorIndex", "IndicatorValue")
                                                                 VALUES %s
                                                                 """
                                                                 execute_values(cursor, insert_query, insert_data)
-                                                                conn.commit()
                                                                 inserted_data = inserted_data + len(insert_data)
+                                                                conn.commit()
                                                             except (Exception, psycopg2.Error) as error:
                                                                 print(
                                                                     f"Błąd wstawiania wierszy dla i={i_value}: {error}")
@@ -274,23 +273,25 @@ while True:
                                                             finally:
                                                                 cursor.close()
 
-                                                        print(f'Wstawiono {inserted_data} wierszy')
-                                                        # Aktualizacja UpdatedShortTerm dla bieżącego symbolu
+                                                        print(f'Wstawiono {inserted_data} wierszy do tabeli PifagorLong')
+
+
+                                                        # Aktualizacja UpdatedLongTerm dla bieżącego symbolu
                                                         if current_symbol_id is not None:
                                                             cursor = conn.cursor()
                                                             try:
                                                                 update_query = """
                                                                 UPDATE public."tStockSymbols"
-                                                                SET "UpdatedShortTerm" = CURRENT_DATE
+                                                                SET "UpdatedLongTerm" = CURRENT_DATE
                                                                 WHERE id = %s
                                                                 """
                                                                 cursor.execute(update_query, (current_symbol_id,))
                                                                 print(
-                                                                    f"Zaktualizowano UpdatedShortTerm dla symbolu: {current_symbol}, id: {current_symbol_id}")
+                                                                    f"Zaktualizowano UpdatedLongTerm dla symbolu: {current_symbol}, id: {current_symbol_id}")
                                                                 conn.commit()
                                                             except (Exception, psycopg2.Error) as error:
                                                                 print(
-                                                                    f"Błąd aktualizacji UpdatedShortTerm dla symbolu {current_symbol}: {error}")
+                                                                    f"Błąd aktualizacji UpdatedLongTerm dla symbolu {current_symbol}: {error}")
                                                                 conn.rollback()
                                                             finally:
                                                                 cursor.close()
