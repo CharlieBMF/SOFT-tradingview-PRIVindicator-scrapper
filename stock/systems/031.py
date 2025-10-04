@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 import time
 from datetime import date
+from collections import deque, Counter
 
 # Placeholder for database connection - adjust with your credentials
 conn = psycopg2.connect(
@@ -39,11 +40,11 @@ for _, symbol_row in df_symbols.iterrows():
     symbol = symbol_row['symbol']
     print(f"\n=== Processing symbol: {symbol} (ID: {symbol_id}) ===")
 
-    # Fetch indicators for indicatorIndex=5 and 22, ordered by TickerRelative ASC (oldest to newest)
+    # Fetch indicators for indicatorIndex=5,7,22,24, ordered by TickerRelative ASC
     cur.execute("""
         SELECT "TickerRelative", "IndicatorIndex", "IndicatorValue"
         FROM public."tStock_IndicatorValues_Pifagor_Long"
-        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 7, 22, 24) AND "TickerRelative"
+        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 7, 22, 24) 
         ORDER BY "TickerRelative" ASC, "IndicatorIndex" ASC 
     """, (symbol_id,))
     ind_rows = cur.fetchall()
@@ -51,10 +52,9 @@ for _, symbol_row in df_symbols.iterrows():
         print(f"No indicator data for symbol {symbol}.")
         continue
     df_ind = pd.DataFrame(ind_rows, columns=['TickerRelative', 'indicatorIndex', 'indicatorValue'])
-    # Pivot to have columns for ind_5, ind_7, ind_22 and ind_24
+    # Pivot to have columns for ind_5, ind_7, ind_22, and ind_24
     df_ind_pivot = df_ind.pivot(index='TickerRelative', columns='indicatorIndex', values='indicatorValue').reset_index()
-    df_ind_pivot.columns = ['TickerRelative', 'ind_5', 'ind_7', 'ind_22', 'ind_24']  # Rename for clarity
-
+    df_ind_pivot.columns = ['TickerRelative', 'ind_5', 'ind_7', 'ind_22', 'ind_24']
 
     # Fetch prices, ordered by TickerRelative ASC
     cur.execute("""
@@ -76,7 +76,7 @@ for _, symbol_row in df_symbols.iterrows():
         print(f"No aligned data for symbol {symbol}.")
         continue
 
-# Simulation variables for this symbol
+    # Simulation variables for this symbol
     positions = []
     position_open = False
     total_shares = 0
@@ -84,9 +84,11 @@ for _, symbol_row in df_symbols.iterrows():
     num_purchases = 0
     open_tr = None
     max_value = 0
-    daily_states = []  # (tr, zysk_strata)
+    daily_states = []
     trailing_stop = 0.0
     trailing_active = False
+    ind_5_below_minus_5_count = 0
+    ind_5_last_values = deque(maxlen=10)
 
     for _, row in df_data.iterrows():
         tr = row['TickerRelative']
@@ -96,15 +98,49 @@ for _, symbol_row in df_symbols.iterrows():
         ind_24 = row['ind_24']
         current_price = row['avg_price']
 
-        #print(f"TR={tr}, ind_22={ind_22}, ind_5={ind_5}, ind_24={ind_24}, price={current_price:.2f}")
+        # dodajemy ind_5 do kolejki (nawet jeśli NaN, wtedy None)
+        ind_5_last_values.append(ind_5 if pd.notna(ind_5) else None)
 
         if position_open:
             current_value = total_shares * current_price
             zysk_strata = current_value - total_invested_symbol
             daily_states.append((tr, zysk_strata))
 
-            # Check if sell triggered
-            if ind_5 < -5:
+            # --- SPRAWDZANIE WARUNKÓW SPRZEDAŻY ---
+            should_sell = False
+            sell_reason = ""
+
+            # Liczymy ile razy ind_5 < 0 w ostatnich 10 wartościach
+            valid_vals = [v for v in ind_5_last_values if v is not None]
+            if len(valid_vals) >= 10:
+                below_zero_count = sum(1 for v in valid_vals if v < 0)
+                if below_zero_count >= 6 and zysk_strata >= 0:
+                    should_sell = True
+                    sell_reason = "ind_5 < 0 in at least 6 of last 10 TR"
+
+            # Check if ind_5 < -5 for consecutive counts
+            if pd.notna(ind_5):
+                if ind_5 < -5:
+                    ind_5_below_minus_5_count += 1
+                else:
+                    ind_5_below_minus_5_count = 0
+            else:
+                ind_5_below_minus_5_count = 0
+
+            if pd.notna(ind_5):
+                if zysk_strata >= 0:
+                    if ind_5 < -7:
+                        should_sell = True
+                        sell_reason = "ind_5 < -7"
+                    elif ind_5_below_minus_5_count >= 3:
+                        should_sell = True
+                        sell_reason = "ind_5 < -5 for three consecutive rows"
+                else:
+                    if ind_5 < -10:
+                        should_sell = True
+                        sell_reason = "ind_5 < -10 (at a loss)"
+
+            if should_sell:
                 zysk = current_value - total_invested_symbol
                 length = tr - open_tr
                 positions.append({
@@ -121,7 +157,7 @@ for _, symbol_row in df_symbols.iterrows():
                 global_zysk += zysk
                 global_invested += total_invested_symbol
                 global_positions.append(positions[-1])
-                print(f"Sold due to ind_5 < -5: zysk={zysk:.2f} ({length} days)")
+                print(f"Sold due to {sell_reason}: zysk={zysk:.2f} ({length} days)")
                 position_open = False
                 total_shares = 0
                 total_invested_symbol = 0
@@ -129,20 +165,20 @@ for _, symbol_row in df_symbols.iterrows():
                 open_tr = None
                 max_value = 0
                 daily_states = []
+                ind_5_below_minus_5_count = 0
+                ind_5_last_values.clear()
                 continue
 
         # Check for buy (open or add to position)
         if ind_22 > 3 or ind_7 > 0:
-            # Determine amount based on ind_24
             if ind_22 == 6:
                 amount = 10.0
             elif ind_22 == 9:
                 amount = 30.0
             elif ind_7 == 1:
                 amount = 10.0
-
             else:
-                continue  # Skip buy if ind_24 not in ranges
+                continue
 
             buy_price = current_price
             shares_bought = amount / buy_price
@@ -154,6 +190,7 @@ for _, symbol_row in df_symbols.iterrows():
                 open_tr = tr
                 trailing_stop = 0.0
                 trailing_active = False
+                ind_5_below_minus_5_count = 0
             else:
                 num_purchases += 1
             current_value = total_shares * current_price
@@ -170,13 +207,12 @@ for _, symbol_row in df_symbols.iterrows():
 
     # If position still open at end
     if position_open:
-        # Assume last tr is 0
         last_tr = df_data['TickerRelative'].max()
-        last_price = df_data[df_data['TickerRelative'] == last_tr]['avg_price'].item()
+        last_price = df_data[df_data['TickerRelative'] == last_tr]['avg_price'].iloc[0]
         current_value = total_shares * last_price
         zysk_strata = current_value - total_invested_symbol
         length = last_tr - open_tr
-        positions.append({
+        position = {
             'open_tr': open_tr,
             'close_tr': last_tr,
             'length': length,
@@ -187,7 +223,9 @@ for _, symbol_row in df_symbols.iterrows():
             'final_invested': total_invested_symbol,
             'symbol': symbol,
             'status': 'open'
-        })
+        }
+        positions.append(position)
+        global_positions.append(position)
         print(f"Open position at end: value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
 
     # Symbol summary
@@ -196,10 +234,6 @@ for _, symbol_row in df_symbols.iterrows():
     print(f"Total zysk/strata (closed): {total_zysk_symbol:.2f}")
     for p in positions:
         print(p)
-    # if daily_states:
-    #     print("Daily states:")
-    #     for state in daily_states:
-    #         print(state)
 
 # Global summary
 print("\n=== Global Summary ===")
@@ -209,6 +243,44 @@ total_zysk = total_realized_zysk + total_unrealized_zysk
 print(f"Sumaryczny zrealizowany zysk: {total_realized_zysk:.2f} $")
 print(f"Sumaryczny niezrealizowany zysk: {total_unrealized_zysk:.2f} $")
 print(f"Sumaryczny całkowity zysk: {total_zysk:.2f} $")
+
+# Summary of Profit/Loss for Open Positions
+print("\n=== Podsumowanie Zysku/Straty Otwartych Pozycji ===")
+open_positions = [p for p in global_positions if p.get('status') == 'open']
+total_invested_open = sum(p['final_invested'] for p in open_positions)
+percent_unrealized_zysk = (total_unrealized_zysk / total_invested_open) * 100 if total_invested_open > 0 else 0
+print(f"Całkowity niezrealizowany zysk/strata (USD): {total_unrealized_zysk:.2f} $")
+print(f"Całkowity procentowy zysk/strata otwartych pozycji: {percent_unrealized_zysk:.2f}%")
+if open_positions:
+    print("Szczegóły otwartych pozycji:")
+    for p in open_positions:
+        print(f"Symbol: {p['symbol']}, Zysk/Strata: {p['zysk']:.2f} USD, Procent: {p['percent_zysk']:.2f}%")
+else:
+    print("Brak otwartych pozycji.")
+
+# List all open positions
+if open_positions:
+    print("\n=== Lista Otwartych Pozycji ===")
+    for p in open_positions:
+        print(f"dla symbolu {p['symbol']} pozycja otwarta przez {p['length']} dni o łącznej wartości {p['max_value']:.2f}, aktualny zysk/strata pozycji {p['zysk']:.2f} usd czyli {p['percent_zysk']:.2f}%")
+else:
+    print("\n=== Lista Otwartych Pozycji ===")
+    print("Brak otwartych pozycji.")
+
+# Count of positions by duration
+print("\n=== Licznik Pozycji Według Czasu Otwarcia ===")
+length_counts = Counter(p['length'] for p in global_positions)
+for length, count in sorted(length_counts.items()):
+    print(f"Pozycja była otwarta przez {length} dni: {count} razy")
+
+# Top 10 longest open positions
+print("\n=== Top 10 Najdłużej Otwartych Pozycji ===")
+top_10_positions = sorted(global_positions, key=lambda p: p['length'], reverse=True)[:10]
+if top_10_positions:
+    for p in top_10_positions:
+        print(f"pozycja na symbolu o nazwie {p['symbol']} była otwarta przez {p['length']} dni od TickerRelative {p['open_tr']} do TickerRelative {p['close_tr']} z liczbą dokupień {p['num_purchases']}")
+else:
+    print("Brak pozycji do wyświetlenia.")
 
 closed_positions = [p for p in global_positions if 'status' not in p]
 if closed_positions:
@@ -225,44 +297,40 @@ if closed_positions:
 else:
     print("No closed positions.")
 
-open_positions = [p for p in global_positions if p.get('status') == 'open']
-if open_positions:
-    print("Open positions:")
-    # for p in open_positions:
-    #     print(p)
-
-# Additional summary: Max total invested across all symbols per TickerRelative
-max_capital_used = 0.0
-if global_invested_data:
-    df_global_invested = pd.DataFrame(global_invested_data)
-    grouped = df_global_invested.groupby('tr')['invested'].sum().reset_index()
-    max_row = grouped.loc[grouped['invested'].idxmax()]
-    max_capital_used = max_row['invested']
-    print(f"\n=== Additional Summary ===")
-    print(f"Największy łączny koszt otwartych pozycji dla wszystkich symboli: {max_capital_used:.2f} $ dla TickerRelative = {max_row['tr']}")
+# Calculate total invested and max invested for percentage profits
+total_invested_all = sum(p['final_invested'] for p in global_positions)
+# Calculate maximum invested capital across all TRs
+df_invested = pd.DataFrame(global_invested_data)
+if not df_invested.empty:
+    max_invested_series = df_invested.groupby('tr')['invested'].sum()
+    max_invested_capital = max_invested_series.max()
+    max_invested_tr = max_invested_series.idxmax()
 else:
-    print("\n=== Additional Summary ===")
-    print("No invested data available.")
-
-if max_capital_used > 0:
-    percent_zysk = (total_zysk / max_capital_used) * 100
+    max_invested_capital = 0
+    max_invested_tr = None
+# Existing percentage profit (total profit / total invested)
+if total_invested_all > 0:
+    percent_zysk = (total_zysk / total_invested_all) * 100
 else:
     percent_zysk = 0
-print(f"Procentowy zysk (całkowity zysk / max zainwestowany kapitał): {percent_zysk:.2f}%")
-
-# New summary: Invested per TickerRelative in order
-if global_invested_data:
-    print("\n=== Podsumowanie zainwestowanego kapitału po TickerRelative ===")
-    grouped_sorted = grouped.sort_values('tr')
-    for _, row in grouped_sorted.iterrows():
-        print(f"TickerRelative {row['tr']}: zainwestowano {row['invested']:.2f} $")
+print(f"Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): {percent_zysk:.2f}%")
+# New percentage profit (total profit / max invested capital)
+if max_invested_capital > 0:
+    percent_zysk_max_invested = (total_zysk / max_invested_capital) * 100
 else:
-    print("\n=== Podsumowanie zainwestowanego kapitału po TickerRelative ===")
-    print("No invested data available.")
+    percent_zysk_max_invested = 0
+print(f"Procentowy zysk (całkowity zysk / max zainwestowany kapitał): {percent_zysk_max_invested:.2f}%")
+# New requested metrics
+if max_invested_capital > 0:
+    percent_realized_zysk_max_invested = (total_realized_zysk / max_invested_capital) * 100
+else:
+    percent_realized_zysk_max_invested = 0
+print(f"Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): {percent_realized_zysk_max_invested:.2f}%")
+print(f"Największy łączny koszt otwartych pozycji dla wszystkich symboli: {max_invested_capital:.2f} dla TickerRelative = {max_invested_tr if max_invested_tr is not None else 'N/A'}")
 
 # Verbal summary and statistics
 print("\n=== Summary of Script Operation ===")
-print("The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total realized profit, unrealized profit, total profit, percentage gain calculated as (total profit / maximum capital used) * 100 where maximum capital used is the highest concurrent invested amount across all symbols at any TickerRelative, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost. Finally, it provides a sequential summary of the total invested capital for each TickerRelative in ascending order.")
+print("The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5', 'indicatorIndex=7', and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3 or 'indicatorIndex=7' exceeded 0, for an amount determined by specific values: $10 if ind_22=6 or ind_7=1, $30 if ind_22=9, regardless of an existing open position. Positions were closed when either: (1) the position was at a profit or break-even (profit/loss >= 0) and 'indicatorIndex=5' was less than -7 or less than -5 for three consecutive periods, or (2) the position was at a loss (profit/loss < 0) and 'indicatorIndex=5' was less than -10. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the sell condition was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative'. The global summary provided total realized profit, unrealized profit, total profit, percentage gain calculated as (total profit / total invested capital) * 100 where total invested capital is the sum of invested amounts across all positions, and percentage gain calculated as (total profit / maximum invested capital) * 100 where maximum invested capital is the peak sum of invested amounts across all symbols at any TickerRelative. It also included a count of positions by their duration (days open) and listed the top 10 longest open positions with their symbol, duration, TickerRelative range, and number of additional purchases. Finally, it provides a sequential summary of the total invested capital for each TickerRelative in ascending order, along with the maximum invested capital and the corresponding TickerRelative.")
 
 # Close connection
 cur.close()

@@ -1,0 +1,1031 @@
+001
+=== Global Summary ===
+Sumaryczny zysk: 186.75 $, procentowy zysk: 8.19%
+Sredni czas otwarcia pozycji: 53.06 days
+Najdluzszy czas otwarcia pozycji: 550.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 32.97 $ (symbol: NYSE:ADNT)
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 218.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols',
+'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and
+'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22'
+ and 'indicatorIndex=5'. A position was opened or additional shares were bought for $1 whenever 'indicatorIndex=22'
+ exceeded 3, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism:
+ when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated
+ daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop.
+ The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value,
+  closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were
+   calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit,
+   percentage gain, average position duration, longest position duration with its symbol, and the highest position
+    value with its symbol. Additionally, it computed the maximum total cost of open positions across all
+    symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+
+
+002 - zamykana pozycja od jakiegos floating gowna
+=== Global Summary ===
+Sumaryczny zysk: 307.54 $, procentowy zysk: 8.43%
+Sredni czas otwarcia pozycji: 52.73 days
+Najdluzszy czas otwarcia pozycji: 550.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 79.39 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 328
+Liczba pozycji zamknietych na stracie: 75
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 358.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit, percentage gain, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+
+
+
+
+003 - zamykana pozycja gdy sygnal sprzedazy pifagora, kupno jak w 002
+
+=== Global Summary ===
+Sumaryczny zysk: 438.36 $, procentowy zysk: 12.09%
+Sredni czas otwarcia pozycji: 80.66 days
+Najdluzszy czas otwarcia pozycji: 389.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 74.45 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 275
+Liczba pozycji zamknietych na stracie: 47
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 386.00 $ dla TickerRelative = -1387.0
+
+=== Summary of Script Operation ===
+The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total profit, percentage gain, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost.
+
+
+=== Global Summary === dla max symboli
+Sumaryczny zysk: 5015.02 $, procentowy zysk: 9.38%
+Sredni czas otwarcia pozycji: 83.63 days
+Najdluzszy czas otwarcia pozycji: 732.0 days (symbol: NASDAQ:HAS)
+Najwieksza wartosc pozycji: 72.59 $ (symbol: NASDAQ:HAS)
+Liczba pozycji zamknietych na zysku: 4074
+Liczba pozycji zamknietych na stracie: 669
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 4952.00 $ dla TickerRelative = -1696.0
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 350.06 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 350.06 $
+Sredni czas otwarcia pozycji: 63.77 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:REGN)
+Najwieksza wartosc pozycji: 64.39 $ (symbol: NASDAQ:REGN)
+Liczba pozycji zamknietych na zysku: 380
+Liczba pozycji zamknietych na stracie: 69
+0.18 stratnych
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 3673.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 9.53%
+
+
+
+
+
+
+
+
+
+
+004- dodatkowo dokupowanie przez duzy zolty trojkat
+
+=== Global Summary ===
+Sumaryczny zysk: 544.49 $, procentowy zysk: 10.48%
+Sredni czas otwarcia pozycji: 74.58 days
+Najdluzszy czas otwarcia pozycji: 499.0 days (symbol: NYSE:ADNT)
+Najwieksza wartosc pozycji: 75.58 $ (symbol: NYSE:ADNT)
+Liczba pozycji zamknietych na zysku: 665
+Liczba pozycji zamknietych na stracie: 79
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 482.00 $ dla TickerRelative = -112.0
+
+
+
+=== Global Summary ===
+Sumaryczny zysk: 6674.73 $, procentowy zysk: 8.70%
+Sredni czas otwarcia pozycji: 79.41 days
+Najdluzszy czas otwarcia pozycji: 866.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 86.09 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 9429
+Liczba pozycji zamknietych na stracie: 993
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 6381.00 $ dla TickerRelative = -479.0
+
+
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 484.47 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 484.47 $
+Sredni czas otwarcia pozycji: 73.31 days
+Najdluzszy czas otwarcia pozycji: 499.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 86.09 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 734
+Liczba pozycji zamknietych na stracie: 91
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 429.00 $ dla TickerRelative = -1692.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 112.93%
+
+
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 4774.58 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4774.58 $
+Sredni czas otwarcia pozycji: 62.76 days
+Najdluzszy czas otwarcia pozycji: 241.0 days (symbol: NASDAQ:REGN)
+Najwieksza wartosc pozycji: 678.52 $ (symbol: NASDAQ:REGN)
+Liczba pozycji zamknietych na zysku: 817
+Liczba pozycji zamknietych na stracie: 109
+0.13 stratnych
+
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 47070.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.14%
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 37850.89 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 37850.89 $
+Sredni czas otwarcia pozycji: 78.63 days
+Najdluzszy czas otwarcia pozycji: 866.0 days (symbol: NYSE:MMM)
+Najwieksza wartosc pozycji: 798.07 $ (symbol: NYSE:MMM)
+Liczba pozycji zamknietych na zysku: 6069
+Liczba pozycji zamknietych na stracie: 572
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 38990.00 $ dla TickerRelative = -814.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 97.08%
+
+
+005
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 443.19 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 443.19 $
+Sredni czas otwarcia pozycji: 49.93 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:REGN)
+Najwieksza wartosc pozycji: 66.14 $ (symbol: NASDAQ:REGN)
+Liczba pozycji zamknietych na zysku: 1433
+Liczba pozycji zamknietych na stracie: 260
+
+0.18 stratnych
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 4364.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.16%
+
+
+
+006
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 8938.81 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 8938.81 $
+Sredni czas otwarcia pozycji: 53.04 days
+Najdluzszy czas otwarcia pozycji: 236.0 days (symbol: NASDAQ:CPRT)
+Najwieksza wartosc pozycji: 897.17 $ (symbol: NASDAQ:CPRT)
+Liczba pozycji zamknietych na zysku: 2789
+Liczba pozycji zamknietych na stracie: 349
+
+0.12 na stracie
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 80644.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.08%
+
+
+
+007
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 13445.70 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 13445.70 $
+Sredni czas otwarcia pozycji: 53.04 days
+Najdluzszy czas otwarcia pozycji: 236.0 days (symbol: NASDAQ:CPRT)
+Najwieksza wartosc pozycji: 998.70 $ (symbol: NASDAQ:CPRT)
+Liczba pozycji zamknietych na zysku: 2787
+Liczba pozycji zamknietych na stracie: 351
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 120218.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.18%
+
+
+
+008
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 7581.21 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 7581.21 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPRT)
+Najwieksza wartosc pozycji: 892.22 $ (symbol: NASDAQ:CPRT)
+Liczba pozycji zamknietych na zysku: 2338
+Liczba pozycji zamknietych na stracie: 277
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 67222.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.28%
+
+
+
+009
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 10606.15 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 10606.15 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPRT)
+Najwieksza wartosc pozycji: 988.80 $ (symbol: NASDAQ:CPRT)
+Liczba pozycji zamknietych na zysku: 2345
+Liczba pozycji zamknietych na stracie: 270
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 92190.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.50%
+
+
+
+010
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 13533.88 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 13533.88 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 1171.72 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2349
+Liczba pozycji zamknietych na stracie: 266
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 116628.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.60%
+
+
+
+011
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 16406.04 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 16406.04 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 1524.91 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2353
+Liczba pozycji zamknietych na stracie: 262
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 140726.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.66%
+
+
+
+012
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 19282.45 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 19282.45 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 1878.10 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2354
+Liczba pozycji zamknietych na stracie: 261
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 164400.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.73%
+
+
+013
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 48208.50 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 48208.50 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:REGN)
+Najwieksza wartosc pozycji: 3930.24 $ (symbol: NASDAQ:REGN)
+Liczba pozycji zamknietych na zysku: 2336
+Liczba pozycji zamknietych na stracie: 289
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 417020.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.56%
+
+
+
+
+014
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 25119.06 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 25119.06 $
+Sredni czas otwarcia pozycji: 53.42 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2363
+Liczba pozycji zamknietych na stracie: 262
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 210975.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.91%
+
+
+
+015
+=== Global Summary === 5BMarketCap
+Sumaryczny zrealizowany zysk: 27486.72 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 27486.72 $
+Sredni czas otwarcia pozycji: 56.76 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2003
+Liczba pozycji zamknietych na stracie: 186
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 223900.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.28%
+
+=== Global Summary === 15B MarketCap
+Sumaryczny zrealizowany zysk: 18482.55 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 18482.55 $
+Sredni czas otwarcia pozycji: 53.56 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:BIIB)
+Najwieksza wartosc pozycji: 2315.30 $ (symbol: NASDAQ:BIIB)
+Liczba pozycji zamknietych na zysku: 1421
+Liczba pozycji zamknietych na stracie: 114
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 134655.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 13.73%
+
+=== Global Summary ===20B MarketCap
+Sumaryczny zrealizowany zysk: 16862.54 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 16862.54 $
+Sredni czas otwarcia pozycji: 53.41 days
+Najdluzszy czas otwarcia pozycji: 235.0 days (symbol: NASDAQ:BIIB)
+Najwieksza wartosc pozycji: 2315.30 $ (symbol: NASDAQ:BIIB)
+Liczba pozycji zamknietych na zysku: 1257
+Liczba pozycji zamknietych na stracie: 103
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 115785.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 14.56%
+
+=== Global Summary === 30B MarketCap
+Sumaryczny zrealizowany zysk: 13380.44 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 13380.44 $
+Sredni czas otwarcia pozycji: 52.25 days
+Najdluzszy czas otwarcia pozycji: 220.0 days (symbol: NYSE:LEN)
+Najwieksza wartosc pozycji: 2225.68 $ (symbol: NYSE:LEN)
+Liczba pozycji zamknietych na zysku: 998
+Liczba pozycji zamknietych na stracie: 78
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 84660.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 15.80%
+
+=== Global Summary === 30B MarketCap
+Sumaryczny zrealizowany zysk: 109553.83 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 109553.83 $
+Sredni czas otwarcia pozycji: 64.11 days
+Najdluzszy czas otwarcia pozycji: 732.0 days (symbol: NASDAQ:CMCSA)
+Najwieksza wartosc pozycji: 3445.26 $ (symbol: NASDAQ:CMCSA)
+Liczba pozycji zamknietych na zysku: 10986
+Liczba pozycji zamknietych na stracie: 808
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 163010.00 $ dla TickerRelative = -804.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 67.21%
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 143130.83 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 143130.83 $
+Sredni czas otwarcia pozycji: 65.27 days
+Najdluzszy czas otwarcia pozycji: 732.0 days (symbol: NASDAQ:CMCSA)
+Najwieksza wartosc pozycji: 3445.26 $ (symbol: NASDAQ:CMCSA)
+Liczba pozycji zamknietych na zysku: 14031
+Liczba pozycji zamknietych na stracie: 1098
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 206920.00 $ dla TickerRelative = -804.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 69.17%
+
+
+016
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 28126.57 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 28126.57 $
+Sredni czas otwarcia pozycji: 58.94 days
+Najdluzszy czas otwarcia pozycji: 239.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 1819
+Liczba pozycji zamknietych na stracie: 168
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 231560.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.15%
+
+
+017
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 29180.18 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 29180.18 $
+Sredni czas otwarcia pozycji: 60.65 days
+Najdluzszy czas otwarcia pozycji: 241.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 1685
+Liczba pozycji zamknietych na stracie: 144
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 238985.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.21%
+
+
+018
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: -51026.32 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: -51026.32 $
+Sredni czas otwarcia pozycji: 59.40 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NASDAQ:BIIB)
+Najwieksza wartosc pozycji: 1464.76 $ (symbol: NASDAQ:BIIB)
+Liczba pozycji zamknietych na zysku: 1850
+Liczba pozycji zamknietych na stracie: 533
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 132377.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): -38.55%
+
+
+019
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: -106916.96 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: -106916.96 $
+Sredni czas otwarcia pozycji: 59.40 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NYSE:IPG)
+Najwieksza wartosc pozycji: 3279.51 $ (symbol: NYSE:IPG)
+Liczba pozycji zamknietych na zysku: 1893
+Liczba pozycji zamknietych na stracie: 490
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 251832.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): -42.46%
+
+
+020
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 10208.34 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 10208.34 $
+Sredni czas otwarcia pozycji: 56.76 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NASDAQ:BIIB)
+Najwieksza wartosc pozycji: 806.40 $ (symbol: NASDAQ:BIIB)
+Liczba pozycji zamknietych na zysku: 1908
+Liczba pozycji zamknietych na stracie: 281
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 95275.00 $ dla TickerRelative = -113.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.71%
+
+
+021
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 14740.96 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 14740.96 $
+Sredni czas otwarcia pozycji: 56.76 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NASDAQ:BIIB)
+Najwieksza wartosc pozycji: 1157.89 $ (symbol: NASDAQ:BIIB)
+Liczba pozycji zamknietych na zysku: 1939
+Liczba pozycji zamknietych na stracie: 250
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 138160.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.67%
+
+
+022
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 31060.02 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 31060.02 $
+Sredni czas otwarcia pozycji: 63.90 days
+Najdluzszy czas otwarcia pozycji: 238.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 2028
+Liczba pozycji zamknietych na stracie: 219
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 246420.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.60%
+
+=== Global Summary === 15BMarket Cap
+Sumaryczny zrealizowany zysk: 20501.04 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 20501.04 $
+Sredni czas otwarcia pozycji: 62.38 days
+Najdluzszy czas otwarcia pozycji: 236.0 days (symbol: NYSE:LEN)
+Najwieksza wartosc pozycji: 2507.33 $ (symbol: NYSE:LEN)
+Liczba pozycji zamknietych na zysku: 1438
+Liczba pozycji zamknietych na stracie: 140
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 152820.00 $ dla TickerRelative = -108.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 13.42%
+
+
+=== Global Summary === 20B MarketCap
+Sumaryczny zrealizowany zysk: 18310.54 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 18310.54 $
+Sredni czas otwarcia pozycji: 61.55 days
+Najdluzszy czas otwarcia pozycji: 236.0 days (symbol: NYSE:LEN)
+Najwieksza wartosc pozycji: 2507.33 $ (symbol: NYSE:LEN)
+Liczba pozycji zamknietych na zysku: 1267
+Liczba pozycji zamknietych na stracie: 127
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 132760.00 $ dla TickerRelative = -108.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 13.79%
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 14175.79 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 14175.79 $
+Sredni czas otwarcia pozycji: 59.85 days
+Najdluzszy czas otwarcia pozycji: 227.0 days (symbol: NYSE:LEN)
+Najwieksza wartosc pozycji: 2507.33 $ (symbol: NYSE:LEN)
+Liczba pozycji zamknietych na zysku: 1005
+Liczba pozycji zamknietych na stracie: 97
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 99080.00 $ dla TickerRelative = -108.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 14.31%
+
+
+
+023
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 28814.15 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 28814.15 $
+Sredni czas otwarcia pozycji: 68.02 days
+Najdluzszy czas otwarcia pozycji: 241.0 days (symbol: NASDAQ:CPB)
+Najwieksza wartosc pozycji: 2761.08 $ (symbol: NASDAQ:CPB)
+Liczba pozycji zamknietych na zysku: 1594
+Liczba pozycji zamknietych na stracie: 76
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 237720.00 $ dla TickerRelative = -110.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.12%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 66747.28 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 66747.28 $
+Sredni czas otwarcia pozycji: 79.41 days
+Najdluzszy czas otwarcia pozycji: 866.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 860.94 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 9428
+Liczba pozycji zamknietych na stracie: 993
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 63810.00 $ dla TickerRelative = -479.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 104.60%
+
+
+24
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 86832.23 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 86832.23 $
+Sredni czas otwarcia pozycji: 96.57 days
+Najdluzszy czas otwarcia pozycji: 972.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 1427.33 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 8537
+Liczba pozycji zamknietych na stracie: 602
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 74250.00 $ dla TickerRelative = -1693.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 116.95%
+
+25
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 89672.42 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 89672.42 $
+Sredni czas otwarcia pozycji: 101.81 days
+Najdluzszy czas otwarcia pozycji: 973.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 1865.93 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 8230
+Liczba pozycji zamknietych na stracie: 566
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 76380.00 $ dla TickerRelative = -815.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 117.40%
+
+26
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 141233.96 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 141233.96 $
+Sredni czas otwarcia pozycji: 79.41 days
+Najdluzszy czas otwarcia pozycji: 866.0 days (symbol: NYSE:MMM)
+Najwieksza wartosc pozycji: 1680.36 $ (symbol: NYSE:MMM)
+Liczba pozycji zamknietych na zysku: 9387
+Liczba pozycji zamknietych na stracie: 1034
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 137430.00 $ dla TickerRelative = -814.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 102.77%
+
+027
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 108327.26 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 108327.26 $
+Sredni czas otwarcia pozycji: 105.84 days
+Najdluzszy czas otwarcia pozycji: 1318.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 5748.28 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 8348
+Liczba pozycji zamknietych na stracie: 126
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 90020.00 $ dla TickerRelative = -478.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 120.34%
+
+
+028 - TO JEST NAJLEPSZE BO POZYCJA POJEDYNCZA JEST BARDZO MALA
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 75711.92 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 75711.92 $
+Sredni czas otwarcia pozycji: 59.50 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 983.42 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12501
+Liczba pozycji zamknietych na stracie: 91
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 66940.00 $ dla TickerRelative = -1698.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 113.10%
+
+029
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 104311.24 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 104311.24 $
+Sredni czas otwarcia pozycji: 104.86 days
+Najdluzszy czas otwarcia pozycji: 1318.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 1865.93 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 8407
+Liczba pozycji zamknietych na stracie: 126
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 89620.00 $ dla TickerRelative = -478.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 116.39%
+
+
+
+030
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 72783.61 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 72783.61 $
+Sredni czas otwarcia pozycji: 58.96 days
+Najdluzszy czas otwarcia pozycji: 1064.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 983.42 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12588
+Liczba pozycji zamknietych na stracie: 86
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 65650.00 $ dla TickerRelative = -478.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 110.87%
+
+
+
+
+
+
+
+
+
+028
+Sumaryczny zrealizowany zysk: 75711.92 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 75711.92 $
+Sredni czas otwarcia pozycji: 59.50 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 983.42 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12501
+Liczba pozycji zamknietych na stracie: 91
+
+=== Additional Summary ===
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 66940.00 $ dla TickerRelative = -1698.0
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 113.10%
+
+
+028 = 031 ale jest odjeta strata na zniezrealizowanym zysku, choc nie powinnismy
+
+031
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 75711.92 $
+Sumaryczny niezrealizowany zysk: -3154.41 $
+Sumaryczny całkowity zysk: 72557.51 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -3154.41 $
+Całkowity procentowy zysk/strata otwartych pozycji: -9.99%
+
+Sredni czas otwarcia pozycji: 59.50 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 983.42 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12501
+Liczba pozycji zamknietych na stracie: 91
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.08%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 108.39%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 113.10%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 66940.00 dla TickerRelative = -1698.0
+
+
+
+032
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 80908.45 $
+Sumaryczny niezrealizowany zysk: -3385.95 $
+Sumaryczny całkowity zysk: 77522.50 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -3385.95 $
+Całkowity procentowy zysk/strata otwartych pozycji: -10.11%
+
+Sredni czas otwarcia pozycji: 59.44 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 998.20 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12514
+Liczba pozycji zamknietych na stracie: 88
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.11%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 107.70%
+
+
+034
+
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 99289.61 $
+Sumaryczny niezrealizowany zysk: -4390.58 $
+Sumaryczny całkowity zysk: 94899.03 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -4390.58 $
+Całkowity procentowy zysk/strata otwartych pozycji: -10.71%
+
+Sredni czas otwarcia pozycji: 59.49 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 1370.46 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12492
+Liczba pozycji zamknietych na stracie: 97
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.38%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 105.99%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 110.89%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 89540.00 dla TickerRelative = -1698.0
+
+
+035
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 52089.63 $
+Sumaryczny niezrealizowany zysk: -2318.27 $
+Sumaryczny całkowity zysk: 49771.36 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -2318.27 $
+Całkowity procentowy zysk/strata otwartych pozycji: -9.88%
+
+Sredni czas otwarcia pozycji: 59.44 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 596.37 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12494
+Liczba pozycji zamknietych na stracie: 93
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 8.47%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 108.84%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 113.91%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 45730.00 dla TickerRelative = -814.0
+
+031
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 75711.92 $
+Sumaryczny niezrealizowany zysk: -3154.41 $
+Sumaryczny całkowity zysk: 72557.51 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -3154.41 $
+Całkowity procentowy zysk/strata otwartych pozycji: -9.99%
+
+Sredni czas otwarcia pozycji: 59.50 days
+Najdluzszy czas otwarcia pozycji: 1167.0 days (symbol: NYSE:HSY)
+Najwieksza wartosc pozycji: 983.42 $ (symbol: NYSE:HSY)
+Liczba pozycji zamknietych na zysku: 12501
+Liczba pozycji zamknietych na stracie: 91
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.08%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 108.39%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 113.10%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 66940.00 dla TickerRelative = -1698.0
+
+
+037 - top of the top
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 85733.71 $
+Sumaryczny niezrealizowany zysk: -1987.51 $
+Sumaryczny całkowity zysk: 83746.21 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -1987.51 $
+Całkowity procentowy zysk/strata otwartych pozycji: -5.37%
+
+Sredni czas otwarcia pozycji: 91.05 days
+Najdluzszy czas otwarcia pozycji: 1175.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 2812.22 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 10066
+Liczba pozycji zamknietych na stracie: 1512
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.49%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 122.96%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 125.88%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 68110.00 dla TickerRelative = -475.0
+
+039
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 60345.53 $
+Sumaryczny niezrealizowany zysk: -1390.50 $
+Sumaryczny całkowity zysk: 58955.03 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -1390.50 $
+Całkowity procentowy zysk/strata otwartych pozycji: -5.00%
+
+Sredni czas otwarcia pozycji: 91.01 days
+Najdluzszy czas otwarcia pozycji: 1175.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 10024
+Liczba pozycji zamknietych na stracie: 1549
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.05%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 127.06%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 130.06%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 46400.00 dla TickerRelative = -475.0
+
+040
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 86284.45 $
+Sumaryczny niezrealizowany zysk: -1693.38 $
+Sumaryczny całkowity zysk: 84591.07 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -1693.38 $
+Całkowity procentowy zysk/strata otwartych pozycji: -4.42%
+
+Sredni czas otwarcia pozycji: 95.89 days
+Najdluzszy czas otwarcia pozycji: 786.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 2812.22 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 9585
+Liczba pozycji zamknietych na stracie: 1613
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.60%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 123.78%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 126.26%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 68340.00 dla TickerRelative = -475.0
+
+041 - mix 039 oraz 040 (oba dawaly wiekszy wynik niz top 037)
+041 - TOP OF THE TOP
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 60732.14 $
+Sumaryczny niezrealizowany zysk: -1142.55 $
+Sumaryczny całkowity zysk: 59589.59 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -1142.55 $
+Całkowity procentowy zysk/strata otwartych pozycji: -3.95%
+
+Sredni czas otwarcia pozycji: 95.84 days
+Najdluzszy czas otwarcia pozycji: 768.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 9546
+Liczba pozycji zamknietych na stracie: 1650
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.16%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 128.34%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 130.80%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 46430.00 dla TickerRelative = -475.0
+
+dodac przy znalezeniuu dobrej wartosci trailing stoip - jesli pendin sell jest dluzszy niz... to go resetuj
+0.935
+Sredni czas otwarcia pozycji: 106.63 days
+Najdluzszy czas otwarcia pozycji: 848.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 8572
+Liczba pozycji zamknietych na stracie: 1841
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.39%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 131.06%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 132.01%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 46460.00 dla TickerRelative = -475.0
+
+0.925
+Sredni czas otwarcia pozycji: 119.84 days
+Najdluzszy czas otwarcia pozycji: 878.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 7538
+Liczba pozycji zamknietych na stracie: 1941
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.62%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 132.34%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 131.67%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 46950.00 dla TickerRelative = -475.0
+
+0.915
+Sredni czas otwarcia pozycji: 135.96 days
+Najdluzszy czas otwarcia pozycji: 1055.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 6543
+Liczba pozycji zamknietych na stracie: 1973
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 11.23%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 134.29%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 131.95%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 48890.00 dla TickerRelative = -478.0
+
+042 - top of the top
+MC - 5B
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 64512.55 $
+Sumaryczny niezrealizowany zysk: 1142.92 $
+Sumaryczny całkowity zysk: 65655.46 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): 1142.92 $
+Całkowity procentowy zysk/strata otwartych pozycji: 3.07%
+
+Sredni czas otwarcia pozycji: 135.96 days
+Najdluzszy czas otwarcia pozycji: 1055.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 6543
+Liczba pozycji zamknietych na stracie: 1973
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 11.23%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 134.29%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 131.95%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 48890.00 dla TickerRelative = -478.0
+
+MC - 20B
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 36819.10 $
+Sumaryczny niezrealizowany zysk: 1192.14 $
+Sumaryczny całkowity zysk: 38011.24 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): 1192.14 $
+Całkowity procentowy zysk/strata otwartych pozycji: 5.53%
+
+
+Sredni czas otwarcia pozycji: 145.78 days
+Najdluzszy czas otwarcia pozycji: 1055.0 days (symbol: NYSE:GE)
+Najwieksza wartosc pozycji: 702.12 $ (symbol: NYSE:GE)
+Liczba pozycji zamknietych na zysku: 3921
+Liczba pozycji zamknietych na stracie: 1217
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.82%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 130.22%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 126.14%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 29190.00 dla TickerRelative = -479.0
+
+
+
+
+

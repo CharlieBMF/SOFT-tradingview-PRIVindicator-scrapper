@@ -39,21 +39,22 @@ for _, symbol_row in df_symbols.iterrows():
     symbol = symbol_row['symbol']
     print(f"\n=== Processing symbol: {symbol} (ID: {symbol_id}) ===")
 
-    # Fetch indicators for indicatorIndex=5, 22, and 24, ordered by TickerRelative ASC (oldest to newest)
+    # Fetch indicators for indicatorIndex=5 and 22, ordered by TickerRelative ASC (oldest to newest)
     cur.execute("""
         SELECT "TickerRelative", "IndicatorIndex", "IndicatorValue"
         FROM public."tStock_IndicatorValues_Pifagor_Long"
-        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 22, 24) AND "TickerRelative" > -250
-        ORDER BY "TickerRelative" ASC, "IndicatorIndex"
+        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 7, 22, 24) 
+        ORDER BY "TickerRelative" ASC, "IndicatorIndex" ASC 
     """, (symbol_id,))
     ind_rows = cur.fetchall()
     if not ind_rows:
         print(f"No indicator data for symbol {symbol}.")
         continue
     df_ind = pd.DataFrame(ind_rows, columns=['TickerRelative', 'indicatorIndex', 'indicatorValue'])
-    # Pivot to have columns for ind_5, ind_22, and ind_24
+    # Pivot to have columns for ind_5, ind_7, ind_22 and ind_24
     df_ind_pivot = df_ind.pivot(index='TickerRelative', columns='indicatorIndex', values='indicatorValue').reset_index()
-    df_ind_pivot.columns = ['TickerRelative', 'ind_5', 'ind_22', 'ind_24']  # Rename for clarity
+    df_ind_pivot.columns = ['TickerRelative', 'ind_5', 'ind_7', 'ind_22', 'ind_24']  # Rename for clarity
+
 
     # Fetch prices, ordered by TickerRelative ASC
     cur.execute("""
@@ -75,7 +76,7 @@ for _, symbol_row in df_symbols.iterrows():
         print(f"No aligned data for symbol {symbol}.")
         continue
 
-    # Simulation variables for this symbol
+# Simulation variables for this symbol
     positions = []
     position_open = False
     total_shares = 0
@@ -91,8 +92,11 @@ for _, symbol_row in df_symbols.iterrows():
         tr = row['TickerRelative']
         ind_22 = row['ind_22']
         ind_5 = row['ind_5']
+        ind_7 = row['ind_7']
         ind_24 = row['ind_24']
         current_price = row['avg_price']
+
+        #print(f"TR={tr}, ind_22={ind_22}, ind_5={ind_5}, ind_24={ind_24}, price={current_price:.2f}")
 
         if position_open:
             current_value = total_shares * current_price
@@ -128,12 +132,15 @@ for _, symbol_row in df_symbols.iterrows():
                 continue
 
         # Check for buy (open or add to position)
-        if ind_22 > 3:
+        if ind_22 > 3 or ind_7 > 0:
             # Determine amount based on ind_24
             if ind_22 == 6:
-                amount = 1.0
+                amount = 30.0
             elif ind_22 == 9:
-                amount = 3.0
+                amount = 30.0
+            elif ind_7 == 1:
+                amount = 30.0
+
             else:
                 continue  # Skip buy if ind_24 not in ranges
 
@@ -184,11 +191,11 @@ for _, symbol_row in df_symbols.iterrows():
         print(f"Open position at end: value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
 
     # Symbol summary
-    # print(f"\nSummary for {symbol}:")
-    # total_zysk_symbol = sum(p['zysk'] for p in positions if p.get('status') != 'open')
-    # print(f"Total zysk/strata (closed): {total_zysk_symbol:.2f}")
-    # for p in positions:
-    #     print(p)
+    print(f"\nSummary for {symbol}:")
+    total_zysk_symbol = sum(p['zysk'] for p in positions if p.get('status') != 'open')
+    print(f"Total zysk/strata (closed): {total_zysk_symbol:.2f}")
+    for p in positions:
+        print(p)
     # if daily_states:
     #     print("Daily states:")
     #     for state in daily_states:
@@ -219,10 +226,10 @@ else:
     print("No closed positions.")
 
 open_positions = [p for p in global_positions if p.get('status') == 'open']
-# if open_positions:
-#     print("Open positions:")
-#     for p in open_positions:
-#         print(p)
+if open_positions:
+    print("Open positions:")
+    # for p in open_positions:
+    #     print(p)
 
 # Additional summary: Max total invested across all symbols per TickerRelative
 max_capital_used = 0.0
@@ -254,3 +261,9 @@ else:
     print("No invested data available.")
 
 # Verbal summary and statistics
+print("\n=== Summary of Script Operation ===")
+print("The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5' and 'indicatorIndex=24'. A position was opened or additional shares were bought whenever 'indicatorIndex=22' exceeded 3, for an amount determined by 'indicatorIndex=24': $1 if 0 <= value < 30, $2 if 30 <= value < 60, $3 if 60 <= value < 100, $5 if value >= 100, regardless of an existing open position. Positions were closed using a trailing stop-loss mechanism: when the position gained at least 5%, the stop-loss was set to break-even (average entry price), and then updated daily to trail 5% below the current price. The position was sold entirely if the price fell below the trailing stop. The script tracked daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions when the trailing stop was triggered or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total realized profit, unrealized profit, total profit, percentage gain calculated as (total profit / maximum capital used) * 100 where maximum capital used is the highest concurrent invested amount across all symbols at any TickerRelative, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost. Finally, it provides a sequential summary of the total invested capital for each TickerRelative in ascending order.")
+
+# Close connection
+cur.close()
+conn.close()

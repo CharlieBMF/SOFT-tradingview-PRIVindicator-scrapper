@@ -43,7 +43,7 @@ for _, symbol_row in df_symbols.iterrows():
     cur.execute("""
         SELECT "TickerRelative", "IndicatorIndex", "IndicatorValue"
         FROM public."tStock_IndicatorValues_Pifagor_Long"
-        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 7, 22, 24) AND "TickerRelative" > -250
+        WHERE "idSymbol" = %s AND "IndicatorIndex" IN (5, 7, 22, 24) 
         ORDER BY "TickerRelative" ASC, "IndicatorIndex" ASC 
     """, (symbol_id,))
     ind_rows = cur.fetchall()
@@ -82,6 +82,8 @@ for _, symbol_row in df_symbols.iterrows():
     invested_from_22 = 0
     shares_from_7 = 0
     invested_from_7 = 0
+    shares_from_small = 0
+    invested_from_small = 0
     total_invested_symbol = 0
     num_purchases = 0
     open_tr = None
@@ -89,6 +91,8 @@ for _, symbol_row in df_symbols.iterrows():
     daily_states = []  # (tr, zysk_strata)
     trailing_stop = 0.0
     trailing_active = False
+    # NOWE: Licznik kolejnych TickerRelative dla warunku -4 < ind_5 < 0
+    consecutive_ind5_condition = 0
 
     for _, row in df_data.iterrows():
         tr = row['TickerRelative']
@@ -98,9 +102,9 @@ for _, symbol_row in df_symbols.iterrows():
         ind_24 = row['ind_24']
         current_price = row['avg_price']
 
-        #print(f"TR={tr}, ind_22={ind_22}, ind_5={ind_5}, ind_7={ind_7}, ind_24={ind_24}, price={current_price:.2f}")
-
-        total_shares = shares_from_22 + shares_from_7
+        # total_shares obejmuje wszystkie typy akcji
+        total_shares = shares_from_22 + shares_from_7 + shares_from_small
+        zysk_strata = 0  # Inicjalizacja
         if position_open:
             current_value = total_shares * current_price
             zysk_strata = current_value - total_invested_symbol
@@ -108,7 +112,7 @@ for _, symbol_row in df_symbols.iterrows():
 
             # Check sell conditions
             if ind_5 < -5:
-                # Sell all
+                # Sell all (w tym small)
                 current_value = total_shares * current_price
                 zysk = current_value - total_invested_symbol
                 length = tr - open_tr
@@ -127,90 +131,153 @@ for _, symbol_row in df_symbols.iterrows():
                 global_zysk += zysk
                 global_invested += total_invested_symbol
                 global_positions.append(positions[-1])
-                print(f"Sold ALL due to ind_5 < -5: zysk={zysk:.2f} ({length} days)")
+                print(f"Sold ALL (incl. small) due to ind_5 < -5: zysk={zysk:.2f} ({length} days)")
                 position_open = False
                 shares_from_22 = 0
                 invested_from_22 = 0
                 shares_from_7 = 0
                 invested_from_7 = 0
+                shares_from_small = 0
+                invested_from_small = 0
                 total_invested_symbol = 0
                 num_purchases = 0
                 open_tr = None
                 max_value = 0
                 daily_states = []
+                consecutive_ind5_condition = 0  # Reset licznika
                 continue
-            elif ind_5 < 0 and ind_5 > -4 and shares_from_7 > 0:
-                # Sell only shares from ind_7
-                value_from_7 = shares_from_7 * current_price
-                zysk_from_7 = value_from_7 - invested_from_7
-                length = tr - open_tr
-                positions.append({
-                    'open_tr': open_tr,
-                    'close_tr': tr,
-                    'length': length,
-                    'zysk': zysk_from_7,
-                    'percent_zysk': (zysk_from_7 / invested_from_7) * 100 if invested_from_7 > 0 else 0,
-                    'num_purchases': num_purchases,  # Note: num_purchases includes all, but this is partial
-                    'max_value': max_value,  # Approximate, as max_value is for whole
-                    'final_invested': invested_from_7,
-                    'symbol': symbol,
-                    'sold_type': 'partial_ind7_ind5_bt_minus4_0'
-                })
-                global_zysk += zysk_from_7
-                global_invested += invested_from_7
-                global_positions.append(positions[-1])
-                print(f"Sold PARTIAL (ind_7 shares) due to -4 < ind_5 < 0: zysk={zysk_from_7:.2f} ({length} days)")
-                shares_from_7 = 0
-                invested_from_7 = 0
-                total_invested_symbol = invested_from_22
-                # Check if position still open
-                if shares_from_22 == 0:
-                    position_open = False
-                    num_purchases = 0
-                    open_tr = None
-                    max_value = 0
-                    daily_states = []
-                continue
+            elif ind_5 < 0 and ind_5 > -4:
+                # Zliczanie kolejnych TickerRelative dla warunku -4 < ind_5 < 0
+                consecutive_ind5_condition += 1
+                if consecutive_ind5_condition >= 3:
+                    # Sprzedaż shares_from_7
+                    if shares_from_7 > 0:
+                        value_from_7 = shares_from_7 * current_price
+                        zysk_from_7 = value_from_7 - invested_from_7
+                        length = tr - open_tr
+                        positions.append({
+                            'open_tr': open_tr,
+                            'close_tr': tr,
+                            'length': length,
+                            'zysk': zysk_from_7,
+                            'percent_zysk': (zysk_from_7 / invested_from_7) * 100 if invested_from_7 > 0 else 0,
+                            'num_purchases': num_purchases,
+                            'max_value': max_value,
+                            'final_invested': invested_from_7,
+                            'symbol': symbol,
+                            'sold_type': 'partial_ind7_ind5_bt_minus4_0_consecutive'
+                        })
+                        global_zysk += zysk_from_7
+                        global_invested += invested_from_7
+                        global_positions.append(positions[-1])
+                        print(f"Sold PARTIAL (ind_7) due to -4 < ind_5 < 0 for 3 consecutive TR: zysk={zysk_from_7:.2f} ({length} days)")
+                        shares_from_7 = 0
+                        invested_from_7 = 0
+                        total_invested_symbol = invested_from_22 + invested_from_small
+                        # Check if position still open
+                        if shares_from_22 == 0 and shares_from_small == 0:
+                            position_open = False
+                            num_purchases = 0
+                            open_tr = None
+                            max_value = 0
+                            daily_states = []
+                        consecutive_ind5_condition = 0  # Reset licznika po sprzedaży
 
-        # Check for buy (open or add to position)
-        if ind_22 > 3 or ind_7 > 0:
+                    # Sprzedaż shares_from_small
+                    if shares_from_small > 0:
+                        value_from_small = shares_from_small * current_price
+                        zysk_from_small = value_from_small - invested_from_small
+                        length = tr - open_tr
+                        positions.append({
+                            'open_tr': open_tr,
+                            'close_tr': tr,
+                            'length': length,
+                            'zysk': zysk_from_small,
+                            'percent_zysk': (zysk_from_small / invested_from_small) * 100 if invested_from_small > 0 else 0,
+                            'num_purchases': num_purchases,
+                            'max_value': max_value,
+                            'final_invested': invested_from_small,
+                            'symbol': symbol,
+                            'sold_type': 'partial_small_ind5_bt_minus4_0_consecutive'
+                        })
+                        global_zysk += zysk_from_small
+                        global_invested += invested_from_small
+                        global_positions.append(positions[-1])
+                        print(f"Sold PARTIAL (small) due to -4 < ind_5 < 0 for 3 consecutive TR: zysk={zysk_from_small:.2f} ({length} days)")
+                        shares_from_small = 0
+                        invested_from_small = 0
+                        total_invested_symbol = invested_from_22 + invested_from_7
+                        # Check if position still open
+                        if shares_from_22 == 0 and shares_from_7 == 0:
+                            position_open = False
+                            num_purchases = 0
+                            open_tr = None
+                            max_value = 0
+                            daily_states = []
+                        consecutive_ind5_condition = 0  # Reset licznika po sprzedaży
+                continue  # Po sprawdzeniu warunku sprzedaży, pomiń kupno
+            else:
+                # Reset licznika, jeśli warunek -4 < ind_5 < 0 nie jest spełniony
+                consecutive_ind5_condition = 0
+
+        # Check for main buy (open or add to position)
+        main_buy_trigger = ind_22 > 3 or ind_7 > 0
+        if main_buy_trigger:
             amount = 0.0
             buy_type = None
             if ind_22 == 6:
-                amount = 1.0
+                amount = 10.0
                 buy_type = 'ind_22'
             elif ind_22 == 9:
-                amount = 3.0
+                amount = 10.0
                 buy_type = 'ind_22'
             elif ind_7 == 1:
-                amount = 1.0
+                amount = 10.0
                 buy_type = 'ind_7'
             else:
-                continue  # Skip buy if no matching condition
+                main_buy_trigger = False  # Jeśli nie pasuje do kwot
 
+            if amount > 0:
+                buy_price = current_price
+                shares_bought = amount / buy_price
+                if buy_type == 'ind_22':
+                    shares_from_22 += shares_bought
+                    invested_from_22 += amount
+                elif buy_type == 'ind_7':
+                    shares_from_7 += shares_bought
+                    invested_from_7 += amount
+                total_invested_symbol += amount
+                if not position_open:
+                    position_open = True
+                    num_purchases = 1
+                    open_tr = tr
+                    trailing_stop = 0.0
+                    trailing_active = False
+                else:
+                    num_purchases += 1
+                current_value = (shares_from_22 + shares_from_7 + shares_from_small) * current_price
+                max_value = max(max_value, current_value)
+                zysk_strata = current_value - total_invested_symbol  # Aktualizacja po kupnie
+                if position_open:
+                    daily_states.append((tr, zysk_strata))
+                print(f"{'Opened' if num_purchases == 1 else 'Added'} ({buy_type}): amount={amount}, price={buy_price:.2f}, shares={shares_bought:.4f}")
+                print(f"Value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
+
+        # Small buy - jeśli pozycja otwarta, NIE ma głównego triggera i jesteśmy stratni (zysk_strata < 0)
+        if position_open and not main_buy_trigger and zysk_strata < 0:
+            amount = 15.0
+            buy_type = 'small'
             buy_price = current_price
             shares_bought = amount / buy_price
-            if buy_type == 'ind_22':
-                shares_from_22 += shares_bought
-                invested_from_22 += amount
-            elif buy_type == 'ind_7':
-                shares_from_7 += shares_bought
-                invested_from_7 += amount
+            shares_from_small += shares_bought
+            invested_from_small += amount
             total_invested_symbol += amount
-            if not position_open:
-                position_open = True
-                num_purchases = 1
-                open_tr = tr
-                trailing_stop = 0.0
-                trailing_active = False
-            else:
-                num_purchases += 1
-            current_value = (shares_from_22 + shares_from_7) * current_price
+            num_purchases += 1
+            current_value = (shares_from_22 + shares_from_7 + shares_from_small) * current_price
             max_value = max(max_value, current_value)
             zysk_strata = current_value - total_invested_symbol
-            if position_open:
-                daily_states.append((tr, zysk_strata))
-            print(f"{'Opened' if num_purchases == 1 else 'Added'} ({buy_type}): amount={amount}, price={buy_price:.2f}, shares={shares_bought:.4f}")
+            daily_states.append((tr, zysk_strata))
+            print(f"Added ({buy_type}): amount={amount}, price={buy_price:.2f}, shares={shares_bought:.4f}")
             print(f"Value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
 
         # Track invested if position open
@@ -222,7 +289,7 @@ for _, symbol_row in df_symbols.iterrows():
         # Assume last tr is 0
         last_tr = df_data['TickerRelative'].max()
         last_price = df_data[df_data['TickerRelative'] == last_tr]['avg_price'].item()
-        total_shares = shares_from_22 + shares_from_7
+        total_shares = shares_from_22 + shares_from_7 + shares_from_small
         current_value = total_shares * last_price
         zysk_strata = current_value - total_invested_symbol
         length = last_tr - open_tr
@@ -238,7 +305,7 @@ for _, symbol_row in df_symbols.iterrows():
             'symbol': symbol,
             'status': 'open'
         })
-        print(f"Open position at end: value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
+        print(f"Open position at end (incl. small): value={current_value:.2f}, invested={total_invested_symbol:.2f}, zysk={zysk_strata:.2f}")
 
     # Symbol summary
     print(f"\nSummary for {symbol}:")
@@ -246,10 +313,6 @@ for _, symbol_row in df_symbols.iterrows():
     print(f"Total zysk/strata (closed): {total_zysk_symbol:.2f}")
     for p in positions:
         print(p)
-    # if daily_states:
-    #     print("Daily states:")
-    #     for state in daily_states:
-    #         print(state)
 
 # Global summary
 print("\n=== Global Summary ===")
@@ -310,9 +373,9 @@ else:
     print("\n=== Podsumowanie zainwestowanego kapitału po TickerRelative ===")
     print("No invested data available.")
 
-# Verbal summary and statistics
+# Updated summary: Verbal description
 print("\n=== Summary of Script Operation ===")
-print("The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', 'indicatorIndex=5', 'indicatorIndex=7', and 'indicatorIndex=24'. Positions are opened or added to when ind_22 > 3 or ind_7 > 0, with amounts based on specific values: $1 for ind_22=6, $3 for ind_22=9, $1 for ind_7=1. Purchases are tracked separately based on whether triggered by ind_22 or ind_7. For selling: if ind_5 < -5, sell all shares; if -4 < ind_5 < 0, sell only shares bought via ind_7 trigger. The script tracks daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions fully or partially based on sell triggers or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total realized profit, unrealized profit, total profit, percentage gain calculated as (total profit / maximum capital used) * 100 where maximum capital used is the highest concurrent invested amount across all symbols at any TickerRelative, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost. Finally, it provides a sequential summary of the total invested capital for each TickerRelative in ascending order.")
+print("The script analyzed trading performance based on historical data from the 'tStockSymbols', 'tStock_IndicatorValues_Pifagor_Long', and 'tStock_Prices' tables. It selected symbols with 'enabled=True' and 'updatedLongTerm' set to October 1, 2025. For each symbol, it monitored the indicator values for 'indicatorIndex=22', Taxiartifacts, 'indicatorIndex=5', 'indicatorIndex=7', and 'indicatorIndex=24'. Positions are opened or added to when ind_22 > 3 or ind_7 > 0, with amounts based on specific values: $10 for ind_22=6, $10 for ind_22=9, $10 for ind_7=1. If a position is open, no main buy trigger occurs in subsequent TickerRelative, and the overall position is at a loss (zysk_strata < 0), add $15 small buy. Purchases are tracked separately based on whether triggered by ind_22, ind_7, or small. For selling: if ind_5 < -5, sell all shares (incl. small); if -4 < ind_5 < 0 for three consecutive TickerRelative, sell shares bought via ind_7 and separately sell small buys, each as distinct transactions. The script tracks daily profit/loss, total invested capital, number of purchases, and maximum position value, closing positions fully or partially based on sell triggers or leaving them open if data ended. Unrealized gains were calculated for open positions at the last 'TickerRelative=0'. The global summary provided total realized profit, unrealized profit, total profit, percentage gain calculated as (total profit / maximum capital used) * 100 where maximum capital used is the highest concurrent invested amount across all symbols at any TickerRelative, average position duration, longest position duration with its symbol, and the highest position value with its symbol. Additionally, it computed the maximum total cost of open positions across all symbols for each TickerRelative and reported the TickerRelative with the highest such cost. Finally, it provides a sequential summary of the total invested capital for each TickerRelative in ascending order.")
 
 # Close connection
 cur.close()
