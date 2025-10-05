@@ -1,320 +1,142 @@
-2025-10-02 23:50:40,093 - INFO - Starting trading strategy optimization script
-2025-10-02 23:50:40,098 - INFO - Connected to PostgreSQL database
-2025-10-02 23:50:40,098 - INFO - Fetching unique symbols from tStockSymbols
-2025-10-02 23:50:40,100 - INFO - Fetched 5 unique symbols
-2025-10-02 23:50:40,100 - INFO - Processing data symbol by symbol
-2025-10-02 23:50:40,100 - INFO - Processing symbol NYSE:A (ID: 4) - 1/5
-2025-10-02 23:50:40,925 - INFO - Raw data columns for NYSE:A: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:50:40,931 - INFO - Pivoted columns for NYSE:A: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:50:40,934 - INFO - Processing symbol NASDAQ:AAPL (ID: 12) - 2/5
-2025-10-02 23:50:41,752 - INFO - Raw data columns for NASDAQ:AAPL: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:50:41,757 - INFO - Pivoted columns for NASDAQ:AAPL: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:50:41,759 - INFO - Processing symbol NYSE:ABBV (ID: 16) - 3/5
-2025-10-02 23:50:42,568 - INFO - Raw data columns for NYSE:ABBV: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:50:42,572 - INFO - Pivoted columns for NYSE:ABBV: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:50:42,575 - INFO - Processing symbol NYSE:ABCB (ID: 17) - 4/5
-2025-10-02 23:50:43,387 - INFO - Raw data columns for NYSE:ABCB: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:50:43,392 - INFO - Pivoted columns for NYSE:ABCB: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:50:43,394 - INFO - Processing symbol NASDAQ:ABNB (ID: 23) - 5/5
-2025-10-02 23:50:44,175 - INFO - Raw data columns for NASDAQ:ABNB: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:50:44,178 - INFO - Pivoted columns for NASDAQ:ABNB: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:50:44,180 - INFO - Finished processing all symbols
-2025-10-02 23:50:44,182 - INFO - Combined data into dataframe with 11535 records
-2025-10-02 23:50:44,182 - INFO - Final columns in df_data: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', 'high', 'low', 'avg_price', 'symbol_id', 'symbol']
-2025-10-02 23:50:44,182 - INFO - Performing feature engineering
-2025-10-02 23:50:44,216 - INFO - Feature engineering completed
-2025-10-02 23:50:44,223 - INFO - X columns before scaling: ['5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', 'avg_price', 'price_change', 'ma_5', 'ma_6', 'ma_7', 'ma_8', 'ma_9', 'ma_11', 'ma_13', 'ma_15', 'ma_17', 'ma_19', 'ma_22', 'ma_24', 'ma_26', 'ma_27', 'ma_28', 'ma_29', 'ma_30', 'ma_31', 'ma_32', 'ma_33', 'ma_34', 'ma_35', 'ma_36']
-2025-10-02 23:50:44,224 - INFO - Prepared ML data with shape X: (11530, 48), y: (11530,)
-2025-10-02 23:50:44,226 - INFO - Scaled features
-2025-10-02 23:50:44,227 - INFO - Split data into train and test sets
-2025-10-02 23:50:44,227 - INFO - Training GradientBoostingRegressor
-2025-10-02 23:50:47,326 - INFO - Supervised learning completed with RMSE: 7.5529
-2025-10-02 23:50:47,326 - INFO - Executing strategy optimization
-2025-10-02 23:50:47,326 - INFO - Starting optimization of trading strategy
-2025-10-02 23:50:47,327 - INFO - Trial 1/20
-2025-10-02 23:50:47,917 - INFO - Training PPO for trial 1
-2025-10-02 23:54:47,901 - INFO - Starting trading strategy optimization script
-2025-10-02 23:54:47,906 - INFO - Connected to PostgreSQL database
-2025-10-02 23:54:47,906 - INFO - Fetching unique symbols from tStockSymbols
-2025-10-02 23:54:47,908 - INFO - Fetched 5 unique symbols
-2025-10-02 23:54:47,908 - INFO - Processing data symbol by symbol
-2025-10-02 23:54:47,908 - INFO - Processing symbol NYSE:A (ID: 4) - 1/5
-2025-10-02 23:54:48,733 - INFO - Raw data columns for NYSE:A: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:54:48,739 - INFO - Pivoted columns for NYSE:A: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:54:48,742 - INFO - Processing symbol NASDAQ:AAPL (ID: 12) - 2/5
-2025-10-02 23:54:49,547 - INFO - Raw data columns for NASDAQ:AAPL: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:54:49,552 - INFO - Pivoted columns for NASDAQ:AAPL: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:54:49,555 - INFO - Processing symbol NYSE:ABBV (ID: 16) - 3/5
-2025-10-02 23:54:50,366 - INFO - Raw data columns for NYSE:ABBV: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:54:50,370 - INFO - Pivoted columns for NYSE:ABBV: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:54:50,372 - INFO - Processing symbol NYSE:ABCB (ID: 17) - 4/5
-2025-10-02 23:54:51,183 - INFO - Raw data columns for NYSE:ABCB: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:54:51,187 - INFO - Pivoted columns for NYSE:ABCB: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:54:51,189 - INFO - Processing symbol NASDAQ:ABNB (ID: 23) - 5/5
-2025-10-02 23:54:51,969 - INFO - Raw data columns for NASDAQ:ABNB: ['tr', 'indicator_idx', 'indicator_val', 'high', 'low']
-2025-10-02 23:54:51,972 - INFO - Pivoted columns for NASDAQ:ABNB: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36']
-2025-10-02 23:54:51,974 - INFO - Finished processing all symbols
-2025-10-02 23:54:51,976 - INFO - Combined data into dataframe with 11535 records
-2025-10-02 23:54:51,976 - INFO - Final columns in df_data: ['tr', '5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', 'high', 'low', 'avg_price', 'symbol_id', 'symbol']
-2025-10-02 23:54:51,976 - INFO - Performing feature engineering
-2025-10-02 23:54:52,010 - INFO - Feature engineering completed
-2025-10-02 23:54:52,015 - INFO - X columns before scaling: ['5', '6', '7', '8', '9', '11', '13', '15', '17', '19', '22', '24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', 'avg_price', 'price_change', 'ma_5', 'ma_6', 'ma_7', 'ma_8', 'ma_9', 'ma_11', 'ma_13', 'ma_15', 'ma_17', 'ma_19', 'ma_22', 'ma_24', 'ma_26', 'ma_27', 'ma_28', 'ma_29', 'ma_30', 'ma_31', 'ma_32', 'ma_33', 'ma_34', 'ma_35', 'ma_36']
-2025-10-02 23:54:52,016 - INFO - Prepared ML data with shape X: (11530, 48), y: (11530,)
-2025-10-02 23:54:52,018 - INFO - Scaled features
-2025-10-02 23:54:52,019 - INFO - Split data into train and test sets
-2025-10-02 23:54:52,019 - INFO - Training GradientBoostingRegressor
-2025-10-02 23:54:55,129 - INFO - Supervised learning completed with RMSE: 7.5529
-2025-10-02 23:54:55,130 - INFO - Executing strategy optimization
-2025-10-02 23:54:55,130 - INFO - Starting optimization of trading strategy
-2025-10-02 23:59:02,168 - INFO - Starting trading strategy optimization script
-2025-10-02 23:59:02,173 - INFO - Connected to PostgreSQL database
-2025-10-02 23:59:02,175 - INFO - Fetched 5 unique symbols
-2025-10-02 23:59:02,175 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-02 23:59:03,016 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-02 23:59:03,826 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-02 23:59:04,655 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-02 23:59:05,467 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-02 23:59:09,406 - INFO - Supervised model RMSE: 7.5529
-2025-10-02 23:59:10,005 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:01:07,029 - INFO - Starting trading strategy optimization script
-2025-10-03 00:01:07,034 - INFO - Connected to PostgreSQL database
-2025-10-03 00:01:07,035 - INFO - Fetched 5 unique symbols
-2025-10-03 00:01:07,035 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:01:07,866 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:01:08,678 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:01:09,490 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:01:10,298 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:01:14,230 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:01:14,827 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:02:34,373 - INFO - Starting trading strategy optimization script
-2025-10-03 00:02:34,378 - INFO - Connected to PostgreSQL database
-2025-10-03 00:02:34,380 - INFO - Fetched 5 unique symbols
-2025-10-03 00:02:34,380 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:02:35,212 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:02:36,028 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:02:36,842 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:02:37,654 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:02:41,596 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:02:42,182 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:03:19,840 - INFO - Starting trading strategy optimization script
-2025-10-03 00:03:19,845 - INFO - Connected to PostgreSQL database
-2025-10-03 00:03:19,847 - INFO - Fetched 5 unique symbols
-2025-10-03 00:03:19,847 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:03:20,677 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:03:21,491 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:03:22,299 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:03:23,111 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:03:27,045 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:03:59,574 - INFO - Starting trading strategy optimization script
-2025-10-03 00:03:59,579 - INFO - Connected to PostgreSQL database
-2025-10-03 00:03:59,580 - INFO - Fetched 5 unique symbols
-2025-10-03 00:03:59,581 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:04:00,411 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:04:01,225 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:04:02,041 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:04:02,853 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:04:06,788 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:04:07,385 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:04:31,050 - INFO - Starting trading strategy optimization script
-2025-10-03 00:04:31,055 - INFO - Connected to PostgreSQL database
-2025-10-03 00:04:31,056 - INFO - Fetched 5 unique symbols
-2025-10-03 00:04:31,056 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:04:31,921 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:04:32,756 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:04:33,573 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:04:34,464 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:04:38,404 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:04:39,004 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:05:00,961 - INFO - Starting trading strategy optimization script
-2025-10-03 00:05:00,966 - INFO - Connected to PostgreSQL database
-2025-10-03 00:05:00,967 - INFO - Fetched 5 unique symbols
-2025-10-03 00:05:00,967 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:05:01,798 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:05:02,613 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:05:03,420 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:05:04,231 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:05:08,192 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:05:08,788 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:05:51,467 - INFO - Starting trading strategy optimization script
-2025-10-03 00:05:51,472 - INFO - Connected to PostgreSQL database
-2025-10-03 00:05:51,474 - INFO - Fetched 5 unique symbols
-2025-10-03 00:05:51,474 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:05:52,307 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:05:53,117 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:05:53,926 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:05:54,732 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:05:58,668 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:06:56,512 - INFO - Starting trading strategy optimization script
-2025-10-03 00:06:56,517 - INFO - Connected to PostgreSQL database
-2025-10-03 00:06:56,519 - INFO - Fetched 5 unique symbols
-2025-10-03 00:06:56,519 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:06:57,352 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:06:58,165 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:06:58,981 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:06:59,793 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:07:03,771 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:07:12,269 - INFO - Starting trading strategy optimization script
-2025-10-03 00:07:12,274 - INFO - Connected to PostgreSQL database
-2025-10-03 00:07:12,276 - INFO - Fetched 5 unique symbols
-2025-10-03 00:07:12,276 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:07:13,116 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:07:13,924 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:07:14,735 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:07:15,544 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:07:19,502 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:08:00,302 - INFO - Starting trading strategy optimization script
-2025-10-03 00:08:00,307 - INFO - Connected to PostgreSQL database
-2025-10-03 00:08:00,309 - INFO - Fetched 5 unique symbols
-2025-10-03 00:08:00,309 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:08:01,136 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:08:01,955 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:08:02,760 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:08:03,565 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:08:07,496 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:08:08,099 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:09:27,824 - INFO - Starting trading strategy optimization script
-2025-10-03 00:09:27,830 - INFO - Connected to PostgreSQL database
-2025-10-03 00:09:27,831 - INFO - Fetched 5 unique symbols
-2025-10-03 00:09:27,831 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:09:28,673 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:09:29,489 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:09:30,308 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:09:31,119 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:09:35,062 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:09:35,669 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:10:25,000 - INFO - Starting trading strategy optimization script
-2025-10-03 00:10:25,005 - INFO - Connected to PostgreSQL database
-2025-10-03 00:10:25,007 - INFO - Fetched 5 unique symbols
-2025-10-03 00:10:25,007 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:10:25,842 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:10:26,657 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:10:27,463 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:10:28,274 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:10:32,231 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:10:32,834 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:12:10,691 - INFO - Starting trading strategy optimization script
-2025-10-03 00:12:10,696 - INFO - Connected to PostgreSQL database
-2025-10-03 00:12:10,698 - INFO - Fetched 5 unique symbols
-2025-10-03 00:12:10,698 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:12:11,532 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:12:12,344 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:12:13,158 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:12:14,055 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:12:18,003 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:12:18,594 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:13:40,824 - INFO - Starting trading strategy optimization script
-2025-10-03 00:13:40,828 - INFO - Connected to PostgreSQL database
-2025-10-03 00:13:40,830 - INFO - Fetched 5 unique symbols
-2025-10-03 00:13:40,830 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:13:41,665 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:13:42,486 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:13:43,304 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:13:44,126 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:13:48,062 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:13:48,668 - INFO - Starting PPO training
-2025-10-03 00:14:22,109 - INFO - Starting trading strategy optimization script
-2025-10-03 00:14:22,115 - INFO - Connected to PostgreSQL database
-2025-10-03 00:14:22,116 - INFO - Fetched 5 unique symbols
-2025-10-03 00:14:22,116 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:14:22,948 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:14:23,766 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:14:24,570 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:14:25,383 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:14:29,320 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:14:29,920 - INFO - Starting PPO training
-2025-10-03 00:14:41,226 - INFO - PPO training completed
-2025-10-03 00:16:04,692 - INFO - Starting trading strategy optimization script
-2025-10-03 00:16:04,697 - INFO - Connected to PostgreSQL database
-2025-10-03 00:16:04,698 - INFO - Fetched 5 unique symbols
-2025-10-03 00:16:04,698 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:16:05,529 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:16:06,339 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:16:07,149 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:16:07,957 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:16:11,906 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:16:12,499 - INFO - Starting PPO training
-2025-10-03 00:16:23,679 - INFO - PPO training completed
-2025-10-03 00:18:06,824 - INFO - Starting trading strategy optimization script
-2025-10-03 00:18:06,829 - INFO - Connected to PostgreSQL database
-2025-10-03 00:18:06,830 - INFO - Fetched 5 unique symbols
-2025-10-03 00:18:06,831 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:18:07,657 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:18:08,476 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:18:09,286 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:18:10,094 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:18:14,024 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:18:14,620 - INFO - Optymalizacja iteracja 1
-2025-10-03 00:19:58,930 - INFO - Starting trading strategy optimization script
-2025-10-03 00:19:58,934 - INFO - Connected to PostgreSQL database
-2025-10-03 00:19:58,936 - INFO - Fetched 5 unique symbols
-2025-10-03 00:19:58,936 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:19:59,766 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:20:00,576 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:20:01,385 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:20:02,199 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:20:06,131 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:20:30,716 - INFO - Starting trading strategy optimization script
-2025-10-03 00:20:30,721 - INFO - Connected to PostgreSQL database
-2025-10-03 00:20:30,722 - INFO - Fetched 5 unique symbols
-2025-10-03 00:20:30,722 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:20:31,552 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:20:32,362 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:20:33,173 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:20:33,987 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:20:37,924 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:20:38,521 - INFO - Starting PPO training
-2025-10-03 00:21:01,645 - INFO - Starting trading strategy optimization script
-2025-10-03 00:21:01,650 - INFO - Connected to PostgreSQL database
-2025-10-03 00:21:01,652 - INFO - Fetched 5 unique symbols
-2025-10-03 00:21:01,652 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:21:02,480 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:21:03,297 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:21:04,099 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:21:04,925 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:21:08,936 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:21:09,535 - INFO - Starting PPO training
-2025-10-03 00:22:00,429 - INFO - Starting trading strategy optimization script
-2025-10-03 00:22:00,434 - INFO - Connected to PostgreSQL database
-2025-10-03 00:22:00,435 - INFO - Fetched 5 unique symbols
-2025-10-03 00:22:00,435 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:22:01,274 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:22:02,084 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:22:02,893 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:22:03,715 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:22:07,682 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:22:08,274 - INFO - Starting PPO training
-2025-10-03 00:23:24,627 - INFO - Starting trading strategy optimization script
-2025-10-03 00:23:24,632 - INFO - Connected to PostgreSQL database
-2025-10-03 00:23:24,633 - INFO - Fetched 5 unique symbols
-2025-10-03 00:23:24,634 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:23:25,549 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:23:26,380 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:23:27,191 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:23:28,005 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:23:31,939 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:23:32,527 - INFO - Starting PPO training
-2025-10-03 00:23:43,594 - INFO - PPO training completed
-2025-10-03 00:24:54,619 - INFO - Starting trading strategy optimization script
-2025-10-03 00:24:54,624 - INFO - Connected to PostgreSQL database
-2025-10-03 00:24:54,626 - INFO - Fetched 5 unique symbols
-2025-10-03 00:24:54,626 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:24:55,462 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:24:56,274 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:24:57,087 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:24:57,902 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:25:01,844 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:25:02,436 - INFO - Starting PPO training
-2025-10-03 00:25:13,662 - INFO - PPO training completed
-2025-10-03 00:25:46,428 - INFO - Starting trading strategy optimization script
-2025-10-03 00:25:46,432 - INFO - Connected to PostgreSQL database
-2025-10-03 00:25:46,434 - INFO - Fetched 5 unique symbols
-2025-10-03 00:25:46,434 - INFO - Processing symbol NYSE:A (1/5)
-2025-10-03 00:25:47,264 - INFO - Processing symbol NASDAQ:AAPL (2/5)
-2025-10-03 00:25:48,071 - INFO - Processing symbol NYSE:ABBV (3/5)
-2025-10-03 00:25:48,883 - INFO - Processing symbol NYSE:ABCB (4/5)
-2025-10-03 00:25:49,704 - INFO - Processing symbol NASDAQ:ABNB (5/5)
-2025-10-03 00:25:53,633 - INFO - Supervised model RMSE: 7.5529
-2025-10-03 00:25:54,244 - INFO - Starting PPO training
-2025-10-03 00:26:05,573 - INFO - PPO training completed
-2025-10-03 00:26:12,591 - INFO - Total reward from test run: [0.]
-2025-10-03 00:26:12,596 - INFO - Model saved as ppo_trading_model.zip
+Group -2560--2311:
+Sumaryczny zrealizowany zysk: 1834.43 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 1834.43 $
+Sredni czas otwarcia pozycji: 93.69 days
+Najdluzszy czas otwarcia pozycji: 188.0 days (symbol: AMEX:LEU)
+Najwieksza wartosc pozycji: 424.39 $ (symbol: AMEX:LEU)
+Liczba pozycji zamknietych na zysku: 209
+Liczba pozycji zamknietych na stracie: 92
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 8.99%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 6.60%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 6.60%
+
+Group -2310--2061:
+Sumaryczny zrealizowany zysk: 3858.07 $
+Sumaryczny niezrealizowany zysk: 9.63 $
+Sumaryczny całkowity zysk: 3867.70 $
+Sredni czas otwarcia pozycji: 140.80 days
+Najdluzszy czas otwarcia pozycji: 412.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 862.28 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 381
+Liczba pozycji zamknietych na stracie: 126
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 13.13%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.02%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 10.99%
+
+Group -2060--1811:
+Sumaryczny zrealizowany zysk: 8432.79 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 8432.79 $
+Sredni czas otwarcia pozycji: 188.21 days
+Najdluzszy czas otwarcia pozycji: 627.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 606
+Liczba pozycji zamknietych na stracie: 170
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 15.36%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 20.31%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 20.31%
+
+Group -1810--1561:
+Sumaryczny zrealizowany zysk: 4518.44 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4518.44 $
+Sredni czas otwarcia pozycji: 158.19 days
+Najdluzszy czas otwarcia pozycji: 786.0 days (symbol: NASDAQ:GSAT)
+Najwieksza wartosc pozycji: 501.63 $ (symbol: NASDAQ:GSAT)
+Liczba pozycji zamknietych na zysku: 543
+Liczba pozycji zamknietych na stracie: 232
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 7.68%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.13%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 10.13%
+
+Group -1560--1311:
+Sumaryczny zrealizowany zysk: 12039.52 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 12039.52 $
+Sredni czas otwarcia pozycji: 137.63 days
+Najdluzszy czas otwarcia pozycji: 1055.0 days (symbol: NYSE:GE)
+Najwieksza wartosc pozycji: 702.12 $ (symbol: NYSE:GE)
+Liczba pozycji zamknietych na zysku: 924
+Liczba pozycji zamknietych na stracie: 242
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 14.81%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 26.99%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 26.99%
+
+Group -1310--1061:
+Sumaryczny zrealizowany zysk: 7507.60 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 7507.60 $
+Sredni czas otwarcia pozycji: 96.60 days
+Najdluzszy czas otwarcia pozycji: 671.0 days (symbol: NYSE:KNTK)
+Najwieksza wartosc pozycji: 700.17 $ (symbol: NYSE:KNTK)
+Liczba pozycji zamknietych na zysku: 812
+Liczba pozycji zamknietych na stracie: 101
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 22.98%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 16.83%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 16.83%
+
+Group -1060--811:
+Sumaryczny zrealizowany zysk: 5415.77 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 5415.77 $
+Sredni czas otwarcia pozycji: 131.40 days
+Najdluzszy czas otwarcia pozycji: 576.0 days (symbol: NASDAQ:AVAV)
+Najwieksza wartosc pozycji: 619.11 $ (symbol: NASDAQ:AVAV)
+Liczba pozycji zamknietych na zysku: 753
+Liczba pozycji zamknietych na stracie: 242
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.54%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.09%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 12.09%
+
+Group -810--561:
+Sumaryczny zrealizowany zysk: 4027.98 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4027.98 $
+Sredni czas otwarcia pozycji: 118.30 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:RGTI)
+Najwieksza wartosc pozycji: 913.14 $ (symbol: NASDAQ:RGTI)
+Liczba pozycji zamknietych na zysku: 649
+Liczba pozycji zamknietych na stracie: 303
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 5.87%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 8.99%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 8.99%
+
+Group -560--311:
+Sumaryczny zrealizowany zysk: 6877.84 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 6877.84 $
+Sredni czas otwarcia pozycji: 142.03 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:SMTC)
+Najwieksza wartosc pozycji: 801.83 $ (symbol: NASDAQ:SMTC)
+Liczba pozycji zamknietych na zysku: 683
+Liczba pozycji zamknietych na stracie: 206
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.69%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 14.07%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 14.07%
+
+Group -310--61:
+Sumaryczny zrealizowany zysk: 8679.85 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 8679.85 $
+Sredni czas otwarcia pozycji: 139.97 days
+Najdluzszy czas otwarcia pozycji: 769.0 days (symbol: NYSE:LUMN)
+Najwieksza wartosc pozycji: 892.47 $ (symbol: NYSE:LUMN)
+Liczba pozycji zamknietych na zysku: 819
+Liczba pozycji zamknietych na stracie: 208
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 12.91%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 17.75%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 17.75%
+
+Group -60-189:
+Sumaryczny zrealizowany zysk: 1320.27 $
+Sumaryczny niezrealizowany zysk: 1133.28 $
+Sumaryczny całkowity zysk: 2453.55 $
+Sredni czas otwarcia pozycji: 128.21 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:MDLZ)
+Najwieksza wartosc pozycji: 363.17 $ (symbol: NASDAQ:MDLZ)
+Liczba pozycji zamknietych na zysku: 164
+Liczba pozycji zamknietych na stracie: 51
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 4.91%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 5.02%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 2.70%

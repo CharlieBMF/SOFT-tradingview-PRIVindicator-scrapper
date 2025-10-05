@@ -1025,7 +1025,151 @@ Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 130.22%
 Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 126.14%
 Największy łączny koszt otwartych pozycji dla wszystkich symboli: 29190.00 dla TickerRelative = -479.0
 
+043
+=== Analysis by TickerRelative Groups (250-day increments) ===
 
+Group -2560--2311:
+Sumaryczny zrealizowany zysk: 1834.43 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 1834.43 $
+Sredni czas otwarcia pozycji: 93.69 days
+Najdluzszy czas otwarcia pozycji: 188.0 days (symbol: AMEX:LEU)
+Najwieksza wartosc pozycji: 424.39 $ (symbol: AMEX:LEU)
+Liczba pozycji zamknietych na zysku: 209
+Liczba pozycji zamknietych na stracie: 92
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 8.99%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 6.60%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 6.60%
+
+Group -2310--2061:
+Sumaryczny zrealizowany zysk: 3858.07 $
+Sumaryczny niezrealizowany zysk: 9.63 $
+Sumaryczny całkowity zysk: 3867.70 $
+Sredni czas otwarcia pozycji: 140.80 days
+Najdluzszy czas otwarcia pozycji: 412.0 days (symbol: NASDAQ:APLD)
+Najwieksza wartosc pozycji: 862.28 $ (symbol: NASDAQ:APLD)
+Liczba pozycji zamknietych na zysku: 381
+Liczba pozycji zamknietych na stracie: 126
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 13.13%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 11.02%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 10.99%
+
+Group -2060--1811:
+Sumaryczny zrealizowany zysk: 8432.79 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 8432.79 $
+Sredni czas otwarcia pozycji: 188.21 days
+Najdluzszy czas otwarcia pozycji: 627.0 days (symbol: NASDAQ:MARA)
+Najwieksza wartosc pozycji: 1773.95 $ (symbol: NASDAQ:MARA)
+Liczba pozycji zamknietych na zysku: 606
+Liczba pozycji zamknietych na stracie: 170
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 15.36%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 20.31%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 20.31%
+
+Group -1810--1561:
+Sumaryczny zrealizowany zysk: 4518.44 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4518.44 $
+Sredni czas otwarcia pozycji: 158.19 days
+Najdluzszy czas otwarcia pozycji: 786.0 days (symbol: NASDAQ:GSAT)
+Najwieksza wartosc pozycji: 501.63 $ (symbol: NASDAQ:GSAT)
+Liczba pozycji zamknietych na zysku: 543
+Liczba pozycji zamknietych na stracie: 232
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 7.68%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 10.13%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 10.13%
+
+Group -1560--1311:
+Sumaryczny zrealizowany zysk: 12039.52 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 12039.52 $
+Sredni czas otwarcia pozycji: 137.63 days
+Najdluzszy czas otwarcia pozycji: 1055.0 days (symbol: NYSE:GE)
+Najwieksza wartosc pozycji: 702.12 $ (symbol: NYSE:GE)
+Liczba pozycji zamknietych na zysku: 924
+Liczba pozycji zamknietych na stracie: 242
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 14.81%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 26.99%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 26.99%
+
+Group -1310--1061:
+Sumaryczny zrealizowany zysk: 7507.60 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 7507.60 $
+Sredni czas otwarcia pozycji: 96.60 days
+Najdluzszy czas otwarcia pozycji: 671.0 days (symbol: NYSE:KNTK)
+Najwieksza wartosc pozycji: 700.17 $ (symbol: NYSE:KNTK)
+Liczba pozycji zamknietych na zysku: 812
+Liczba pozycji zamknietych na stracie: 101
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 22.98%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 16.83%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 16.83%
+
+Group -1060--811:
+Sumaryczny zrealizowany zysk: 5415.77 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 5415.77 $
+Sredni czas otwarcia pozycji: 131.40 days
+Najdluzszy czas otwarcia pozycji: 576.0 days (symbol: NASDAQ:AVAV)
+Najwieksza wartosc pozycji: 619.11 $ (symbol: NASDAQ:AVAV)
+Liczba pozycji zamknietych na zysku: 753
+Liczba pozycji zamknietych na stracie: 242
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 9.54%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 12.09%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 12.09%
+
+Group -810--561:
+Sumaryczny zrealizowany zysk: 4027.98 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 4027.98 $
+Sredni czas otwarcia pozycji: 118.30 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:RGTI)
+Najwieksza wartosc pozycji: 913.14 $ (symbol: NASDAQ:RGTI)
+Liczba pozycji zamknietych na zysku: 649
+Liczba pozycji zamknietych na stracie: 303
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 5.87%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 8.99%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 8.99%
+
+Group -560--311:
+Sumaryczny zrealizowany zysk: 6877.84 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 6877.84 $
+Sredni czas otwarcia pozycji: 142.03 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:SMTC)
+Najwieksza wartosc pozycji: 801.83 $ (symbol: NASDAQ:SMTC)
+Liczba pozycji zamknietych na zysku: 683
+Liczba pozycji zamknietych na stracie: 206
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 10.69%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 14.07%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 14.07%
+
+Group -310--61:
+Sumaryczny zrealizowany zysk: 8679.85 $
+Sumaryczny niezrealizowany zysk: 0.00 $
+Sumaryczny całkowity zysk: 8679.85 $
+Sredni czas otwarcia pozycji: 139.97 days
+Najdluzszy czas otwarcia pozycji: 769.0 days (symbol: NYSE:LUMN)
+Najwieksza wartosc pozycji: 892.47 $ (symbol: NYSE:LUMN)
+Liczba pozycji zamknietych na zysku: 819
+Liczba pozycji zamknietych na stracie: 208
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 12.91%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 17.75%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 17.75%
+
+Group -60-189:
+Sumaryczny zrealizowany zysk: 1320.27 $
+Sumaryczny niezrealizowany zysk: 1133.28 $
+Sumaryczny całkowity zysk: 2453.55 $
+Sredni czas otwarcia pozycji: 128.21 days
+Najdluzszy czas otwarcia pozycji: 700.0 days (symbol: NASDAQ:MDLZ)
+Najwieksza wartosc pozycji: 363.17 $ (symbol: NASDAQ:MDLZ)
+Liczba pozycji zamknietych na zysku: 164
+Liczba pozycji zamknietych na stracie: 51
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 4.91%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 5.02%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 2.70%
 
 
 

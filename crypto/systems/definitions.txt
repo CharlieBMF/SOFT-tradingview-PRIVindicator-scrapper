@@ -1,0 +1,24 @@
+042 XDDDDDDD
+=== Global Summary ===
+Sumaryczny zrealizowany zysk: 3855092.22 $
+Sumaryczny niezrealizowany zysk: -6413.34 $
+Sumaryczny całkowity zysk: 3848678.87 $
+
+=== Podsumowanie Zysku/Straty Otwartych Pozycji ===
+Całkowity niezrealizowany zysk/strata (USD): -6413.34 $
+Całkowity procentowy zysk/strata otwartych pozycji: -11.32%
+
+Sredni czas otwarcia pozycji: 122.24 days
+Najdluzszy czas otwarcia pozycji: 1414.0 days (symbol: CRYPTO:LUNAUSD)
+Najwieksza wartosc pozycji: 4278666.66 $ (symbol: CRYPTO:LUNAUSD)
+Liczba pozycji zamknietych na zysku: 4184
+Liczba pozycji zamknietych na stracie: 769
+Procentowy zysk (całkowity zysk / całkowity zainwestowany kapitał): 905.27%
+Procentowy zysk (całkowity zysk / max zainwestowany kapitał): 4889.69%
+Procentowy zysk (całkowity zrealizowany zysk / max zainwestowany kapitał): 4897.84%
+Największy łączny koszt otwartych pozycji dla wszystkich symboli: 78710.00 dla TickerRelative = -717.0
+
+
+
+
+

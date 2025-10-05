@@ -1,6 +1,6 @@
 import re
 
-with open('symbols_html_crypto_10MMarketCap.txt', 'r') as file:
+with open('symbols_html_crypto_10MMC_1MV.txt', 'r') as file:
     content = file.read()
 
 symbols_raw_list = re.findall(r'data-rowkey="([^"]+)"', content)
