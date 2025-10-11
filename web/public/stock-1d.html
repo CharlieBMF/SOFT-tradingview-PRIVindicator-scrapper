@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock 1D - Analiza Rynkowa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e0e7ff;
+            overflow-x: hidden;
+        }
+        .header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            border-bottom: 1px solid #475569;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .table-section {
+            padding: 24px;
+            margin: 24px 0;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
+        }
+        .table-section:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+        .buy-table { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .should-sell-table { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .sell-table { background: linear-gradient(135deg, #f87171, #dc2626); }
+        .table-container {
+            display: grid;
+            grid-template-columns: 1fr 0.7fr 1fr;
+            gap: 32px;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 1.1em;
+        }
+        th {
+            background: linear-gradient(90deg, #2d3748, #4a5568);
+            padding: 16px;
+            text-align: center;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            border-bottom: 2px solid #64748b;
+            color: #facc15; /* Złoty akcent */
+        }
+        td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid #64748b;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        td:hover {
+            background-color: rgba(250, 204, 21, 0.1);
+            color: #facc15;
+        }
+        td a {
+            color: #e0e7ff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        td a:hover {
+            color: #facc15;
+            background: rgba(250, 204, 21, 0.2);
+            transform: scale(1.05);
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            color: #a3bffa;
+            font-size: 1.2em;
+        }
+        .loading i {
+            margin-left: 8px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 1200px) {
+            .table-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .table-section {
+                margin: 16px 0;
+            }
+        }
+        @media (max-width: 640px) {
+            table {
+                font-size: 1em;
+            }
+            th, td {
+                padding: 12px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="header text-white py-10">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold tracking-wide font-roboto">Stock 1D - Analiza Rynkowa</h1>
+            <p class="mt-4 text-xl md:text-2xl text-gray-300">Precyzyjne decyzje inwestycyjne w czasie rzeczywistym</p>
+            <a href="/" class="mt-6 inline-flex items-center bg-gray-800 hover:bg-gray-700 text-white py-3 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
+                <i class="fas fa-arrow-left mr-2"></i> Powrót do menu głównego
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-16 flex-grow">
+        <div class="table-container">
+            <!-- Tabela BUY -->
+            <div class="table-section buy-table" id="buy-table">
+                <h2 class="text-3xl md:text-4xl font-semibold text-white text-center mb-8 flex items-center justify-center">
+                    <i class="fas fa-arrow-up mr-2 text-green-400"></i> Kupno (BUY)
+                </h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="buy-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Tabela SHOULD SELL -->
+            <div class="table-section should-sell-table" id="should-sell-table">
+                <h2 class="text-3xl md:text-4xl font-semibold text-white text-center mb-8 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle mr-2 text-purple-400"></i> Oczekiwanie Sprzedaży
+                </h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Trailing Stop</th>
+                        </tr>
+                    </thead>
+                    <tbody id="should-sell-body"></tbody>
+                </table>
+            </div>
+
+            <!-- Tabela SELL -->
+            <div class="table-section sell-table" id="sell-table">
+                <h2 class="text-3xl md:text-4xl font-semibold text-white text-center mb-8 flex items-center justify-center">
+                    <i class="fas fa-arrow-down mr-2 text-red-400"></i> Sprzedaż (SELL)
+                </h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sell-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 py-8">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-500 text-sm">&copy; 2025 Trading Platform. Wszystkie prawa zastrzeżone. <span class="text-gray-400">Wersja 1.0</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Pobierz dane przy załadowaniu strony z efektem ładowania
+        window.onload = function() {
+            const buyBody = document.getElementById('buy-body');
+            const shouldSellBody = document.getElementById('should-sell-body');
+            const sellBody = document.getElementById('sell-body');
+
+            // Dodaj efekt ładowania
+            [buyBody, shouldSellBody, sellBody].forEach(body => {
+                body.innerHTML = '<tr><td class="loading"><span>Ładowanie danych...</span><i class="fas fa-spinner"></i></td></tr>';
+            });
+
+            fetch('/get-stock-data')
+                .then(response => {
+                    if (!response.ok) throw new Error('Błąd sieciowy');
+                    return response.json();
+                })
+                .then(data => {
+                    // Wyczyść tabele
+                    [buyBody, shouldSellBody, sellBody].forEach(body => body.innerHTML = '');
+
+                    data.forEach(item => {
+                        const symbolRow = document.createElement('tr');
+                        const symbolCell = document.createElement('td');
+                        const link = document.createElement('a');
+                        link.href = `/stock-detail/${item.Symbol}`;
+                        link.textContent = item.Symbol;
+                        symbolCell.appendChild(link);
+                        symbolRow.appendChild(symbolCell);
+
+                        if (item.buy === true) {
+                            buyBody.appendChild(symbolRow.cloneNode(true));
+                        }
+
+                        if (item.shouldSell === true) {
+                            const row = symbolRow.cloneNode(true);
+                            const trailingStopCell = document.createElement('td');
+                            const trailingStop = (item.invested * item.shares / item.maxValue).toFixed(2); // Kalkulacja trailingstop
+                            trailingStopCell.textContent = trailingStop;
+                            row.appendChild(trailingStopCell);
+                            shouldSellBody.appendChild(row);
+                        }
+
+                        if (item.sell === true) {
+                            sellBody.appendChild(symbolRow.cloneNode(true));
+                        }
+                    });
+
+                    // Jeśli żadne dane nie zostały dodane
+                    if (buyBody.children.length === 0) buyBody.innerHTML = '<tr><td class="text-gray-500">Brak danych</td></tr>';
+                    if (shouldSellBody.children.length === 0) shouldSellBody.innerHTML = '<tr><td class="text-gray-500" colspan="2">Brak danych</td></tr>';
+                    if (sellBody.children.length === 0) sellBody.innerHTML = '<tr><td class="text-gray-500">Brak danych</td></tr>';
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania danych:', error);
+                    ['buy-body', 'should-sell-body', 'sell-body'].forEach(id => {
+                        const body = document.getElementById(id);
+                        body.innerHTML = '<tr><td class="text-red-500">Błąd pobierania danych</td></tr>';
+                    });
+                });
+        };
+    </script>
+</body>
+</html>

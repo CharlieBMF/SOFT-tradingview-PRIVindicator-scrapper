@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarządzanie Skryptami</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #e5e7eb;
+        }
+        .option-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #2d2d2d;
+            border: 1px solid #3f3f3f;
+        }
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        a, button {
+            transition: background-color 0.3s ease;
+        }
+        #log-console {
+            height: 300px;
+            overflow-y: auto;
+            background-color: #222;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            color: #a3e635; /* Zielony tekst dla lepszej czytelności */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold">Zarządzanie Skryptami</h1>
+            <p class="mt-2 text-lg text-gray-300">Uruchamiaj i monitoruj skrypty tutaj.</p>
+            <a href="/" class="mt-4 inline-block bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition">Powrót do menu głównego</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 flex-grow">
+        <div class="mt-12">
+            <h2 class="text-2xl font-semibold text-white text-center mb-6">Uruchamianie Skryptów</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Scrapowanie Stock 1D</h2>
+                    <p class="mt-2 text-gray-400">Uruchom skrypt pobierania danych dla Stock 1D.</p>
+                    <button onclick="runStock1DScrap()" class="mt-4 inline-block bg-green-700 text-white py-2 px-4 rounded hover:bg-green-800 transition">Uruchom Scraping</button>
+                    <button onclick="stopStock1DScrap()" class="mt-2 inline-block bg-red-700 text-white py-2 px-4 rounded hover:bg-red-800 transition" disabled>Zatrzymaj Scraping</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Konsola z logami -->
+        <div class="mt-12">
+            <h2 class="text-2xl font-semibold text-white text-center mb-4">Konsola Logów</h2>
+            <div id="log-console" class="text-green-400"></div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Trading Platform. Wszystkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <script>
+        let isRunning = false;
+        let currentLogs = [];
+
+        // Funkcja do uruchamiania skryptu dla Stock 1D
+        function runStock1DScrap() {
+            if (isRunning) return alert('Skrypt już działa.');
+            isRunning = true;
+            currentLogs = []; // Wyczyść obecne logi
+            document.querySelector('button[onclick="stopStock1DScrap()"]').disabled = false;
+            fetch('/run-stock-1d-scrap')
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                })
+                .catch(error => {
+                    alert('Błąd podczas uruchamiania skryptu: ' + error);
+                });
+            updateLogs();
+        }
+
+        // Funkcja do zatrzymywania skryptu
+        function stopStock1DScrap() {
+            if (!isRunning) return alert('Żaden skrypt nie działa.');
+            fetch('/stop-stock-1d-scrap')
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    isRunning = false;
+                    document.querySelector('button[onclick="stopStock1DScrap()"]').disabled = true;
+                })
+                .catch(error => {
+                    alert('Błąd podczas zatrzymywania skryptu: ' + error);
+                });
+        }
+
+        // Aktualizacja logów co 500 ms
+        function updateLogs() {
+            if (!isRunning) {
+                document.getElementById('log-console').textContent = 'Brak aktywnych logów.';
+                return;
+            }
+            fetch('/get-logs')
+                .then(response => {
+                    if (!response.ok) throw new Error('Błąd sieciowy');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Odebrane logi:', data); // Debug
+                    const logConsole = document.getElementById('log-console');
+                    // Zachowaj istniejące logi i dodaj nowe
+                    const newLogs = data.filter(log => !currentLogs.includes(log));
+                    if (newLogs.length > 0) {
+                        currentLogs = [...currentLogs, ...newLogs];
+                        logConsole.textContent = currentLogs.join('\n') || 'Brak logów do wyświetlenia.';
+                        logConsole.scrollTop = logConsole.scrollHeight; // Przewiń do dołu
+                    }
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania logów:', error);
+                    document.getElementById('log-console').textContent = 'Błąd pobierania logów.';
+                });
+            setTimeout(updateLogs, 500); // Aktualizuj co 500 ms
+        }
+    </script>
+</body>
+</html>

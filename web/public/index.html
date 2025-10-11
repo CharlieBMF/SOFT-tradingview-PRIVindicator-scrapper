@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Options</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #e5e7eb;
+        }
+        .option-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #2d2d2d;
+            border: 1px solid #3f3f3f;
+        }
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        a, button {
+            transition: background-color 0.3s ease;
+        }
+        .section {
+            background-color: #1f2937;
+            padding: 20px 0;
+            border-top: 2px solid #4b5563;
+            margin-top: 40px;
+        }
+        .trading-section {
+            background-color: #2f3b53; /* Nieco inny odcień dla odróżnienia */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold">Wybierz Strategię Tradingu</h1>
+            <p class="mt-2 text-lg text-gray-300">Wybierz jedną z dostępnych opcji, aby rozpocząć.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 flex-grow">
+        <!-- Sekcja opcji tradingu -->
+        <div class="trading-section section">
+            <h2 class="text-2xl font-semibold text-white text-center mb-6">Opcje Tradingu</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+                <!-- Stock 1D -->
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Stock 1D</h2>
+                    <p class="mt-2 text-gray-400">Inwestowanie w akcje z perspektywą jednodniową.</p>
+                    <a href="/stock-1d" class="mt-4 inline-block bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800 transition">Wybierz</a>
+                </div>
+                <!-- Crypto 1D -->
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Crypto 1D</h2>
+                    <p class="mt-2 text-gray-400">Inwestowanie w kryptowaluty z perspektywą jednodniową.</p>
+                    <a href="/crypto-1d" class="mt-4 inline-block bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800 transition">Wybierz</a>
+                </div>
+                <!-- Stock Day Trading -->
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Stock Day Trading</h2>
+                    <p class="mt-2 text-gray-400">Aktywny handel akcjami w ciągu jednego dnia.</p>
+                    <a href="/stock-day-trading" class="mt-4 inline-block bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800 transition">Wybierz</a>
+                </div>
+                <!-- Crypto Day Trading -->
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Crypto Day Trading</h2>
+                    <p class="mt-2 text-gray-400">Aktywny handel kryptowalutami w ciągu jednego dnia.</p>
+                    <a href="/crypto-day-trading" class="mt-4 inline-block bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800 transition">Wybierz</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sekcja zarządzania skryptami -->
+        <div class="section">
+            <h2 class="text-2xl font-semibold text-white text-center mb-6">Zarządzanie Skryptami</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6 px-4">
+                <div class="option-card rounded-lg shadow-md p-6 text-center">
+                    <h2 class="text-2xl font-semibold text-white">Zarządzaj Skryptami</h2>
+                    <p class="mt-2 text-gray-400">Przejdź do zarządzania i uruchamiania skryptów.</p>
+                    <a href="/scripts" class="mt-4 inline-block bg-purple-700 text-white py-2 px-4 rounded hover:bg-purple-800 transition">Przejdź</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Trading Platform. Wszystkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -15,7 +15,7 @@ from datetime import datetime
 import keyboard
 
 # Dostosuj te ścieżki do swoich lokalizacji
-OPERA_BINARY_PATH = r'/snap/opera/401/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
+OPERA_BINARY_PATH = r'/snap/opera/403/usr/lib/x86_64-linux-gnu/opera/opera'  # Przykład ścieżki do Opera.exe
 OPERADRIVER_PATH = r'/home/czarli/Documents/operadriver_linux64/operadriver'  # Pobierz z https://github.com/operasoftware/operachromiumdriver/releases i rozpakuj
 OPERA_PROFILE_PATH = r'/home/czarli/snap/opera/399/.config/opera/Default'
 
@@ -84,7 +84,7 @@ seen_messages = set()
 iteration = 0
 previous_request_count = 0
 # Valid indices without 'NO' from the provided table
-valid_indices = [5, 6, 7, 8, 9, 11, 13, 15, 17, 19, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+valid_indices = [5, 7, 22, 24]
 #valid_indices = [i for i in range(0,100)]
 restart_after_iterations = 50
 

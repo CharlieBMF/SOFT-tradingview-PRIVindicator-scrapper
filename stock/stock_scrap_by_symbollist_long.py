@@ -82,7 +82,7 @@ seen_messages = set()
 iteration = 0
 previous_request_count = 0
 # Valid indices without 'NO' from the provided table
-valid_indices = [5, 6, 7, 8, 9, 11, 13, 15, 17, 19, 22, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+valid_indices = [5, 7, 22, 24]
 #valid_indices = [i for i in range(0,100)]
 restart_after_iterations = 35
 
