@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 from tvDatafeed import TvDatafeed, Interval
 from datetime import datetime, timedelta
+import numpy as np
 
 
 # Placeholder for database connection - adjust with your credentials
@@ -23,7 +24,7 @@ SELECT s.id, s."Symbol", s."UpdatedShortTerm", s."enabled"
 FROM public."tStockSymbols" s
 LEFT JOIN public."tStockState" st ON s.id = st."idSymbol"
 WHERE s."enabled" = TRUE 
-  AND (s."UpdatedShortTerm" = '2025-10-11' OR st.status = 'open')
+  AND (s."UpdatedShortTerm" = '2025-10-11' OR st.status = 'open') LIMIT 5
 """)
 symbols_rows = cur.fetchall()
 df_symbols = pd.DataFrame(symbols_rows, columns=['id', 'symbol', 'updatedShortTerm', 'enabled'])
@@ -35,6 +36,7 @@ if df_symbols.empty:
     exit()
 
 for _, symbol_row in df_symbols.iterrows():
+    current_date = datetime.now().date()
     symbol_id = symbol_row['id']
     symbol = symbol_row['symbol']
     print(f"\n=== Processing symbol: {symbol} (ID: {symbol_id}) ===")
@@ -73,11 +75,25 @@ for _, symbol_row in df_symbols.iterrows():
 
 
     else:
-        print(f"No state data found for symbol {symbol}.")
+        # Jeśli brak rekordu, tworzymy domyślny DataFrame z jedną wierszą i zadanymi wartościami
+        default_data = {
+            'idSymbol': [symbol_id],  # Zakładamy, że idSymbol ma być z symbol_id
+            'status': ['close'],
+            'buy': [False],
+            'shouldSell': [False],  # Poprawiona literówka z zapytania użytkownika (souldSell -> shouldSell)
+            'sell': [False],
+            'checked': [current_date],  # current_date
+            'lastAction': [datetime(1990, 1, 1, 0, 0, 0)],  # Timestamp z 1990-01-01 (użyłem datetime dla timestamp)
+            'invested': [0],
+            'shares': [0],
+            'maxValue': [0],
+            'amountBuySell': [0]
+        }
+        df_state = pd.DataFrame(default_data)
 
     # Check if lastAction is today (comparing dates from timestamps)
     last_action = df_state['lastAction'].iloc[0]
-    current_date = datetime.now().date()
+    print('LAST ACTION', last_action)
     if pd.notna(last_action) and last_action.date() == current_date:
         print(f"lastAction for {symbol} is today ({last_action.date()}). Skipping condition checks.")
         continue  # Skip to the next symbol
@@ -168,9 +184,9 @@ for _, symbol_row in df_symbols.iterrows():
 
     current_price = close_price
     position = df_state['status'].iloc[0]
-    buy = df_state['buy'].iloc[0]
-    should_sell = df_state['shouldSell'].iloc[0]
-    sell = df_state['sell'].iloc[0]
+    buy = False if pd.isna(df_state['buy'].iloc[0]) else df_state['buy'].iloc[0]
+    should_sell = False if pd.isna(df_state['shouldSell'].iloc[0]) else df_state['shouldSell'].iloc[0]
+    sell = False if pd.isna(df_state['sell'].iloc[0]) else df_state['sell'].iloc[0]
     total_invested_symbol = float(df_state['invested'].iloc[0]) \
         if pd.notna(df_state['invested'].iloc[0]) else 0
     total_shares = float(df_state['shares'].iloc[0]) if pd.notna(df_state['shares'].iloc[0]) else 0
@@ -179,6 +195,7 @@ for _, symbol_row in df_symbols.iterrows():
 
     if buy or sell:
         continue
+    print('GET DATA FOR INDICATORS')
 
     # Pobieranie zmiennych ind_5, ind_7, ind_22, ind_24 dla najnowszego TickerRelative
     df_ind_sorted = df_ind_pivot.sort_values(by='TickerRelative', ascending=False)
@@ -237,21 +254,27 @@ for _, symbol_row in df_symbols.iterrows():
         buy = True
         amount_buysell = 10.0
 
+    # Before the INSERT/UPDATE block, ensure conversions
+    buy_py = bool(buy) if isinstance(buy, (np.bool_, bool)) else buy
+    should_sell_py = bool(should_sell) if isinstance(should_sell, (np.bool_, bool)) else should_sell
+    sell_py = bool(sell) if isinstance(sell, (np.bool_, bool)) else sell
     # Update or insert into tStockState
     try:
         cur.execute("SELECT COUNT(*) FROM public.\"tStockState\" WHERE \"idSymbol\" = %s", (symbol_id,))
         if cur.fetchone()[0] == 0:
             cur.execute("""
                 INSERT INTO public."tStockState"
-                ("idSymbol", "status", "buy", "shouldSell", "sell", "checked", "maxValue", "amountBuySell")
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            """, (symbol_id, position, buy, should_sell, sell, current_time, recorded_max_value, amount_buysell))
+                ("idSymbol", "status", "buy", "shouldSell", "sell", "checked", "lastAction", "invested", "shares", "maxValue", "amountBuySell")
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+            symbol_id, position, buy_py, should_sell_py, sell_py, current_time, last_action, total_invested_symbol,
+            total_shares, recorded_max_value, amount_buysell))
         else:
             cur.execute("""
                 UPDATE public."tStockState"
                 SET "buy" = %s, "shouldSell" = %s, "sell" = %s, "checked" = %s, "maxValue" = %s, "amountBuySell" = %s
                 WHERE "idSymbol" = %s
-            """, (buy, should_sell, sell, current_time, recorded_max_value, amount_buysell, symbol_id))
+            """, (buy_py, should_sell_py, sell_py, current_time, recorded_max_value, amount_buysell, symbol_id))
         conn.commit()
         print(f"Updated tStockState for {symbol}.")
     except Exception as e:

@@ -37,9 +37,9 @@
         .sell-table { background: linear-gradient(135deg, #f87171, #dc2626); }
         .table-container {
             display: grid;
-            grid-template-columns: 1fr 0.7fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dynamiczne kolumny z minimalną szerokością */
             gap: 32px;
-            max-width: 1500px;
+            width: 100%; /* Usunięto max-width, aby rozciągać się na pełną szerokość */
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -98,10 +98,14 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        @media (max-width: 1200px) {
+        @media (min-width: 1024px) {
             .table-container {
-                grid-template-columns: 1fr;
-                gap: 40px;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 2fr)); /* Większa waga dla maksymalnego rozciągnięcia */
+            }
+        }
+        @media (max-width: 1023px) {
+            .table-container {
+                grid-template-columns: 1fr; /* Jedna kolumna na mniejszych ekranach */
             }
             .table-section {
                 margin: 16px 0;
