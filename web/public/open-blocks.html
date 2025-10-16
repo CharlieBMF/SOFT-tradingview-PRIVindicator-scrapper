@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otwarte Bloki - Analiza Rynkowa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #e0e7ff;
+            overflow-x: hidden;
+        }
+        .header {
+            background: linear-gradient(90deg, #1e293b, #334155);
+            border-bottom: 1px solid #475569;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 8px 0;
+        }
+        .table-section {
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
+        }
+        .table-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.9em;
+        }
+        th {
+            background: linear-gradient(90deg, #2d3748, #4a5568);
+            padding: 8px;
+            text-align: center;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            border-bottom: 1px solid #64748b;
+            color: #facc15;
+            font-size: 0.95em;
+        }
+        td {
+            padding: 6px;
+            text-align: center;
+            border-bottom: 1px solid #64748b;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+        }
+        td:hover {
+            background-color: rgba(250, 204, 21, 0.1);
+            color: #facc15;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+            color: #a3bffa;
+            font-size: 0.9em;
+        }
+        .loading i {
+            margin-left: 4px;
+            animation: spin 1s linear infinite;
+        }
+        .profit-positive {
+            color: #22c55e;
+        }
+        .profit-negative {
+            color: #dc2626;
+        }
+        .blink-green {
+            animation: blink-green 1s infinite;
+        }
+        .blink-red {
+            animation: blink-red 1s infinite;
+        }
+        .blink-purple {
+            animation: blink-purple 1s infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes blink-green {
+            50% { background-color: rgba(34, 197, 94, 0.2); }
+        }
+        @keyframes blink-red {
+            50% { background-color: rgba(220, 38, 38, 0.2); }
+        }
+        @keyframes blink-purple {
+            50% { background-color: rgba(147, 51, 234, 0.2); }
+        }
+        @media (max-width: 640px) {
+            table { font-size: 0.8em; }
+            th, td { padding: 6px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="header text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-wide font-roboto">Otwarte Bloki</h1>
+            <p class="mt-2 text-md md:text-lg text-gray-300">Aktualny status otwartych pozycji</p>
+            <a href="/stock-1d" class="mt-2 inline-flex items-center bg-gray-800 hover:bg-gray-700 text-white py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
+                <i class="fas fa-arrow-left mr-1"></i> Wstecz
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-8 flex-grow">
+        <div class="table-section">
+            <table id="open-blocks-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Zainwestowano</th>
+                        <th>Akcje</th>
+                        <th>Zysk/Strata (%)</th>
+                        <th>Czas otwarcia (dni)</th>
+                    </tr>
+                </thead>
+                <tbody id="open-blocks-body"></tbody>
+            </table>
+            <div id="loading" class="loading"><span>Ładowanie danych...</span><i class="fas fa-spinner"></i></div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 py-4">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-500 text-xs">&copy; 2025 Trading Platform. Wszystkie prawa zastrzeżone. <span class="text-gray-400">Wersja 1.0</span></p>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            const tbody = document.getElementById('open-blocks-body');
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('open-blocks-table');
+
+            // Pokaż loading
+            tbody.style.display = 'none';
+            loading.style.display = 'flex';
+
+            fetch('/get-open-blocks')
+                .then(response => {
+                    if (!response.ok) throw new Error('Błąd sieciowy');
+                    return response.json();
+                })
+                .then(data => {
+                    // Ukryj loading, pokaż tabelę
+                    loading.style.display = 'none';
+                    tbody.style.display = 'table-row-group';
+
+                    // Wyczyść tabelę
+                    tbody.innerHTML = '';
+
+                    // Wypełnij tabelę danymi
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-gray-500">Brak otwartych bloków</td></tr>';
+                    } else {
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.className = (item.buy ? 'blink-green' : '') + (item.sell ? 'blink-red' : '') + (item.shouldSell ? 'blink-purple' : '');
+                            const symbolCell = document.createElement('td');
+                            symbolCell.innerHTML = `<a href="/stock-detail/${item.Symbol}" style="color: #e0e7ff; text-decoration: none;">${item.Symbol} (ID: ${item.symbol_id})</a>`;
+                            symbolCell.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                window.location.href = `/stock-detail/${item.Symbol}`;
+                            });
+                            row.appendChild(symbolCell);
+
+                            const investedCell = document.createElement('td');
+                            investedCell.textContent = item.Invested !== 'N/A' ? `$${item.Invested}` : 'N/A';
+                            row.appendChild(investedCell);
+
+                            const sharesCell = document.createElement('td');
+                            sharesCell.textContent = item.Shares || 'N/A';
+                            row.appendChild(sharesCell);
+
+                            const profitCell = document.createElement('td');
+                            let profitText = item['Profit/Loss (%)'] || 'N/A';
+                            if (profitText !== 'N/A') {
+                                const profitValue = parseFloat(profitText);
+                                if (!isNaN(profitValue)) {
+                                    profitText = `${profitValue.toFixed(2)}%`;
+                                    profitCell.className = profitValue > 0 ? 'profit-positive' : profitValue < 0 ? 'profit-negative' : '';
+                                    profitCell.innerHTML = `${profitValue > 0 ? '↑' : profitValue < 0 ? '↓' : ''} ${profitText}`;
+                                }
+                            }
+                            row.appendChild(profitCell);
+
+                            const timeCell = document.createElement('td');
+                            timeCell.textContent = item['Time Opened (days)'] || 'N/A';
+                            row.appendChild(timeCell);
+
+                            tbody.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania danych:', error);
+                    loading.style.display = 'none';
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-red-500">Błąd pobierania danych</td></tr>';
+                });
+        };
+    </script>
+</body>
+</html>

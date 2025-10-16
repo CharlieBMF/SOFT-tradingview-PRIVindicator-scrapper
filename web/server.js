@@ -36,6 +36,10 @@ app.get('/stock-detail/:symbol', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'stock-detail.html'));
 });
 
+app.get('/open-blocks', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'open-blocks.html'));
+});
+
 app.get('/run-stock-1d-scrap', (req, res) => {
     if (pythonProcess) {
         return res.status(400).send('Skrypt już działa.');
@@ -100,6 +104,77 @@ app.get('/get-stock-data', (req, res) => {
     );
 });
 
+app.get('/get-open-blocks', (req, res) => {
+    pool.query(
+        'SELECT s."Symbol", s.id AS symbol_id, t."invested", t."shares", t."lastAction", t."buy", t."sell", t."shouldSell" ' +
+        'FROM public."tStockState" t ' +
+        'JOIN public."tStockSymbols" s ON t."idSymbol" = s.id ' +
+        'WHERE t."status" = $1',
+        ['open'],
+        (err, result) => {
+            if (err) {
+                console.error('Błąd pobierania otwartych bloków:', err);
+                return res.status(500).json({ error: 'Błąd pobierania danych' });
+            }
+            console.log('Pobrane otwarte bloki:', result.rows);
+
+            const processBlocks = result.rows.map(async (row) => {
+                // Pobierz aktualną cenę z tStock_PricesReal
+                const priceResult = await pool.query(
+                    'SELECT "close" ' +
+                    'FROM public."tStock_PricesReal" ' +
+                    'WHERE "idSymbol" = (SELECT "id" FROM public."tStockSymbols" WHERE "Symbol" = $1) ' +
+                    'ORDER BY "updated" DESC ' +
+                    'LIMIT 1',
+                    [row.Symbol]
+                );
+
+                let currentValue = 0;
+                let profitLoss = 'N/A';
+                if (priceResult.rows.length > 0 && row.invested !== undefined && row.shares !== undefined) {
+                    const currentPrice = parseFloat(priceResult.rows[0].close) || 0;
+                    currentValue = row.shares * currentPrice;
+                    profitLoss = ((currentValue - row.invested) / row.invested * 100).toFixed(2) || 'N/A';
+                }
+
+                // Oblicz czas od otwarcia na podstawie lastAction
+                let timeOpened = 'N/A';
+                if (row.lastAction) {
+                    const openDate = new Date(row.lastAction);
+                    const now = new Date();
+                    if (!isNaN(openDate.getTime())) {
+                        const diffTime = Math.abs(now - openDate);
+                        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                        timeOpened = diffDays === 0 ? 'today' : diffDays;
+                    }
+                }
+
+                return {
+                    Symbol: row.Symbol || 'N/A',
+                    Invested: row.invested !== undefined ? row.invested.toFixed(2) : 'N/A',
+                    Shares: row.shares !== undefined ? row.shares : 'N/A',
+                    'Profit/Loss (%)': profitLoss,
+                    'Time Opened (days)': timeOpened,
+                    symbol_id: row.symbol_id,
+                    buy: row.buy || false,
+                    sell: row.sell || false,
+                    shouldSell: row.shouldSell || false
+                };
+            });
+
+            Promise.all(processBlocks)
+                .then(processedBlocks => {
+                    console.log('Przetworzone bloki:', processedBlocks);
+                    res.json(processedBlocks);
+                })
+                .catch(error => {
+                    console.error('Błąd przetwarzania bloków:', error);
+                    res.status(500).json({ error: 'Błąd przetwarzania danych' });
+                });
+        }
+    );
+});
+
 app.get('/get-symbol-data/:symbol', (req, res) => {
     const symbol = req.params.symbol;
     pool.query(
@@ -151,6 +226,70 @@ app.post('/add-transaction', (req, res) => {
             }
             console.log('Transakcja dodana:', result.rows[0]);
             res.json({ success: true, transaction: result.rows[0] });
+        }
+    );
+});
+
+app.post('/update-stock-state', (req, res) => {
+    const { idSymbol, status, buy, shouldSell, sell, lastAction, invested, shares, maxValue, amountBuySell } = req.body;
+
+    pool.query(
+        'SELECT * FROM public."tStockState" WHERE "idSymbol" = $1',
+        [idSymbol],
+        (err, result) => {
+            if (err) {
+                console.error('Błąd pobierania rekordu tStockState:', err);
+                return res.status(500).json({ success: false, error: err.message });
+            }
+
+            const existing = result.rows[0];
+            if (!existing) {
+                console.error('Brak rekordu dla idSymbol:', idSymbol);
+                return res.status(404).json({ success: false, error: 'Rekord nie istnieje' });
+            }
+
+            let newInvested = invested !== undefined ? invested : existing.invested;
+            let newShares = shares !== undefined ? shares : existing.shares;
+            let newMaxValue = maxValue !== undefined ? maxValue : existing.maxValue;
+
+            // Dla akcji "buy" dodaj do istniejących wartości
+            if (status === 'open') {
+                newInvested = (existing.invested || 0) + (amountBuySell || 10); // Użyj amountBuySell jeśli podane
+                newShares = (existing.shares || 0) + (shares || 0); // Dodaj zakupione akcje
+            }
+
+            // Dla akcji "sell" zeruj odpowiednie pola
+            if (status === 'close') {
+                newInvested = 0;
+                newShares = 0;
+                newMaxValue = 0;
+            }
+
+            // Aktualizacja istniejącego rekordu
+            const query = `
+                UPDATE public."tStockState"
+                SET "status" = $2,
+                    "buy" = $3,
+                    "shouldSell" = $4,
+                    "sell" = $5,
+                    "lastAction" = $6,
+                    "invested" = $7,
+                    "shares" = $8,
+                    "maxValue" = $9,
+                    "amountBuySell" = $10
+                WHERE "idSymbol" = $1
+            `;
+            pool.query(
+                query,
+                [idSymbol, status, buy, shouldSell, sell, lastAction, newInvested, newShares, newMaxValue, amountBuySell],
+                (err) => {
+                    if (err) {
+                        console.error('Błąd aktualizacji tStockState:', err);
+                        return res.status(500).json({ success: false, error: err.message });
+                    }
+                    res.json({ success: true });
+                }
+            );
         }
     );
 });
